@@ -5,6 +5,7 @@
 
 	<property file="build.properties"/>
 	<property name="build.dir" value="${basedir}/build"/>
+	<property name="jar.dir" value="${basedir}/build/jar" />
 	<property name="build.classes.dir" value="${build.dir}/classes"/>
 	<property name="src.dir" value="${basedir}/src"/>
 	<property name="dist.dir" value="${basedir}/dist"/>
@@ -35,7 +36,7 @@
 	<target name="run" depends="build" description="Run the app">
 		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="test.classpath" fork="yes" />
 	</target>
-
+	
 	<target name="build" description="Build the system">
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${build.classes.dir}"/>
@@ -53,7 +54,14 @@
 		</javac>
 
 	</target>
-
+		
+	<target name="dist">
+		<mkdir dir="${jar.dir}" />
+		<jar destfile="${jar.dir}/team7.jar"
+			basedir="${build.classes.dir}"
+		/>
+	</target>
+	
 	<!-- Build internal documentation -->
 	<target name="javadoc" description="Build internal documentation">
 		<mkdir dir="${doc.dir}"/>
