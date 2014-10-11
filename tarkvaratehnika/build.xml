@@ -4,6 +4,23 @@
 	<!-- Definitions of variables used during the rest of this script -->
 
 	<property file="build.properties"/>
+	<propertyfile
+	    file="application.properties"
+	    comment="App properties">
+		<entry  key="teamName" value="Team 7"/>
+		<entry  key="teamLeader" value="Martin Appo"/>
+		<entry	key="leaderEmail" value="martinappo@gmail.com" />
+		<entry  key="teamMembers" value="Martin Appo, Handre Elias, Argo Neumann"/>
+		<entry  key="teamLogo" value="res/ic_menu_search.png"/>
+	</propertyfile>
+	<propertyfile
+	    file="version.properties"
+	    comment="Version properties">
+		<entry  key="build.revision.number" default="" operation="+" value="1" type="int"/>
+		<entry  key="build.minor.number" value="85"/>
+		<entry	key="build.major.number" value="54" />
+	</propertyfile>
+	
 	<property name="build.dir" value="${basedir}/build"/>
 	<property name="jar.dir" value="${basedir}/build/jar" />
 	<property name="build.classes.dir" value="${build.dir}/classes"/>
