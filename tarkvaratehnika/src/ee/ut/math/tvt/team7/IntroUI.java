@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 public class IntroUI {
@@ -21,6 +22,8 @@ public class IntroUI {
             Intro.class.getName());
 
 	public void createAndShowGUI() throws IOException {
+		BasicConfigurator.configure();
+		
 		log.info("Intro window opened");
 		
         JLabel label1 = new JLabel("Team name: team7");
