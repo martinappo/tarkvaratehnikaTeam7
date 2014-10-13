@@ -26,6 +26,7 @@ public class IntroUI {
 	String leaderEmail;
 	String teamMembers;
 	String teamLogo;
+	String version;
 	static Logger log = Logger.getLogger(
             Intro.class.getName());
 
@@ -35,15 +36,21 @@ public class IntroUI {
 		log.info("Intro window opened");
 		
 		Properties application = new Properties();
+		Properties version = new Properties();
     	InputStream input = null;
+    	InputStream input2 = null;
+    	 
  
     	try {
+    		String filename2 = "version.properties";
     		String filename = "application.properties";
     		input = new FileInputStream(filename);
+    		input2 = new FileInputStream(filename2);
     		
  
     		//load a properties file from class path, inside static method
     		application.load(input);
+    		version.load(input2);
  
                 //get the property value and print it out
     		teamName = application.getProperty("teamName");
@@ -58,7 +65,16 @@ public class IntroUI {
         	if(input!=null){
         		try {
 				input.close();
-			} catch (IOException e) {
+			} 
+        		catch (IOException e) {
+				e.printStackTrace();
+			}
+        	}
+        	if(input2 !=null){
+        		try {
+				input2.close();
+			} 
+        		catch (IOException e) {
 				e.printStackTrace();
 			}
         	}
