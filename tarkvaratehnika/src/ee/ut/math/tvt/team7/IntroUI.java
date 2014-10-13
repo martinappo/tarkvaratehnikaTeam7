@@ -26,7 +26,7 @@ public class IntroUI {
 	String leaderEmail;
 	String teamMembers;
 	String teamLogo;
-	String version;
+	String ver;
 	static Logger log = Logger.getLogger(
             Intro.class.getName());
 
@@ -58,6 +58,7 @@ public class IntroUI {
     		leaderEmail = application.getProperty("leaderEmail");
     		teamMembers = application.getProperty("teamMembers");
     		teamLogo= application.getProperty("teamLogo");
+    		ver = version.getProperty("build.number");
  
     	} catch (IOException ex) {
     		ex.printStackTrace();
@@ -84,7 +85,7 @@ public class IntroUI {
         JLabel label2 = new JLabel("Leader: " + teamLeader);
         JLabel label3 = new JLabel("Leader email: " + leaderEmail);
         JLabel label4 = new JLabel("Team members: " + teamMembers);
-        JLabel label5 = new JLabel("Version number: ");
+        JLabel label5 = new JLabel("Version number: " + ver);
         JLabel label6 = new JLabel("Logo: ");
         
         BufferedImage myPicture = ImageIO.read(new File(teamLogo));
