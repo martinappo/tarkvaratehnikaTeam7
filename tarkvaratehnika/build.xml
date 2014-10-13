@@ -4,7 +4,25 @@
 	<!-- Definitions of variables used during the rest of this script -->
 
 	<property file="build.properties"/>
+	<propertyfile
+	    file="application.properties"
+	    comment="App properties">
+		<entry  key="teamName" value="Team 7"/>
+		<entry  key="teamLeader" value="Martin Appo"/>
+		<entry	key="leaderEmail" value="martinappo@gmail.com" />
+		<entry  key="teamMembers" value="Martin Appo, Handre Elias, Argo Neumann"/>
+		<entry  key="teamLogo" value="res/ic_menu_search.png"/>
+	</propertyfile>
+	<propertyfile
+	    file="version.properties"
+	    comment="Version properties">
+		<entry  key="build.revision.number" default="" operation="+" value="1" type="int"/>
+		<entry  key="build.minor.number" value="85"/>
+		<entry	key="build.major.number" value="54" />
+	</propertyfile>
+	
 	<property name="build.dir" value="${basedir}/build"/>
+	<property name="jar.dir" value="${basedir}/build/jar" />
 	<property name="build.classes.dir" value="${build.dir}/classes"/>
 	<property name="src.dir" value="${basedir}/src"/>
 	<property name="dist.dir" value="${basedir}/dist"/>
@@ -35,7 +53,7 @@
 	<target name="run" depends="build" description="Run the app">
 		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="test.classpath" fork="yes" />
 	</target>
-
+	
 	<target name="build" description="Build the system">
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${build.classes.dir}"/>
@@ -53,7 +71,14 @@
 		</javac>
 
 	</target>
-
+		
+	<target name="dist">
+		<mkdir dir="${jar.dir}" />
+		<jar destfile="${jar.dir}/team7.jar"
+			basedir="${build.classes.dir}"
+		/>
+	</target>
+	
 	<!-- Build internal documentation -->
 	<target name="javadoc" description="Build internal documentation">
 		<mkdir dir="${doc.dir}"/>

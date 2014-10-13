@@ -14,12 +14,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import org.apache.log4j.Logger;
+
 public class IntroUI {
+	static Logger log = Logger.getLogger(
+            Intro.class.getName());
 
 	public void createAndShowGUI() throws IOException {
- 
+		log.info("Intro window opened");
+		
         JLabel label1 = new JLabel("Team name: team7");
-        
         JLabel label2 = new JLabel("Leader: Martin Appo");
         JLabel label3 = new JLabel("Leader email: martinappo@gmail.com");
         JLabel label4 = new JLabel("Team members: Handre Elias, Argo Neumann, Martin Appo");

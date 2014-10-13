@@ -4,6 +4,7 @@ import java.io.IOException;
 
 public class Intro {
 
+	
 	public static void main(String[] args) {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -16,6 +17,7 @@ public class Intro {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+                
             }
         });
 
