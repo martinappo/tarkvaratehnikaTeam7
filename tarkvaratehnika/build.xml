@@ -2,8 +2,12 @@
 <project basedir="." name="templateApp" default="build">
 
 	<!-- Definitions of variables used during the rest of this script -->
-
-	<property file="build.properties"/>
+	<propertyfile
+	    file="version.properties"
+	    comment="Version properties">
+		<entry  key="build.revision.number" default="" operation="+" value="1" type="int"/>
+	</propertyfile>
+	<property file="version.properties"/>
 	<propertyfile
 	    file="application.properties"
 	    comment="App properties">
@@ -16,9 +20,9 @@
 	<propertyfile
 	    file="version.properties"
 	    comment="Version properties">
-		<entry  key="build.revision.number" default="" operation="+" value="1" type="int"/>
-		<entry  key="build.minor.number" value="85"/>
-		<entry	key="build.major.number" value="54" />
+		<entry  key="build.minor.number" type="int" value="5"/>
+		<entry	key="build.major.number" type="int" value="1"/>
+		<entry	key="build.number" type="string" value="${build.major.number}.${build.minor.number}.${build.revision.number}"/>
 	</propertyfile>
 	
 	<property name="build.dir" value="${basedir}/build"/>
@@ -30,6 +34,10 @@
 	<property name="conf.dir" value="${basedir}/etc"/>
 	<property name="main-class" value="ee.ut.math.tvt.team7.Intro" />
 	<property name="test.reports.dir" value="${build.dir}/reports/"/>
+	
+	
+
+	
 
 	<!-- Definitions of classpath variants used for different tasks -->
 
