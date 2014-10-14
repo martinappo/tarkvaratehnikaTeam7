@@ -2,114 +2,109 @@
 <project basedir="." name="templateApp" default="build">
 
 	<!-- Definitions of variables used during the rest of this script -->
-	<propertyfile
-	    file="version.properties"
-	    comment="Version properties">
-		<entry  key="build.revision.number" default="" operation="+" value="1" type="int"/>
+	<propertyfile file="version.properties" comment="Version properties">
+		<entry key="build.revision.number" default="" operation="+"
+			value="1" type="int" />
 	</propertyfile>
-	<property file="version.properties"/>
-	<propertyfile
-	    file="application.properties"
-	    comment="App properties">
-		<entry  key="teamName" value="Team 7"/>
-		<entry  key="teamLeader" value="Martin Appo"/>
-		<entry	key="leaderEmail" value="martinappo@gmail.com" />
-		<entry  key="teamMembers" value="Martin Appo, Handre Elias, Argo Neumann"/>
-		<entry  key="teamLogo" value="res/ic_menu_search.png"/>
+	<property file="version.properties" />
+	<propertyfile file="application.properties" comment="App properties">
+		<entry key="teamName" value="Team 7" />
+		<entry key="teamLeader" value="Martin Appo" />
+		<entry key="leaderEmail" value="martinappo@gmail.com" />
+		<entry key="teamMembers" value="Martin Appo, Handre Elias, Argo Neumann" />
+		<entry key="teamLogo" value="res/ic_menu_search.png" />
 	</propertyfile>
-	<propertyfile
-	    file="version.properties"
-	    comment="Version properties">
-		<entry  key="build.minor.number" type="int" value="5"/>
-		<entry	key="build.major.number" type="int" value="1"/>
-		<entry	key="build.number" type="string" value="${build.major.number}.${build.minor.number}.${build.revision.number}"/>
+	<propertyfile file="version.properties" comment="Version properties">
+		<entry key="build.minor.number" type="int" value="5" />
+		<entry key="build.major.number" type="int" value="1" />
+		<entry key="build.number" type="string"
+			value="${build.major.number}.${build.minor.number}.${build.revision.number}" />
 	</propertyfile>
-	
-	<property name="build.dir" value="${basedir}/build"/>
-	<property name="jar.dir" value="${basedir}/build/jar" />
-	<property name="build.classes.dir" value="${build.dir}/classes"/>
-	<property name="src.dir" value="${basedir}/src"/>
-	<property name="res.dir" value="${basedir}/res"/>
-	<property name="lib.dir" value="${basedir}/lib"/>
-	<property name="conf.dir" value="${basedir}/etc"/>
-	<property name="main-class" value="ee.ut.math.tvt.team7.Intro" />
-	<property name="test.reports.dir" value="${build.dir}/reports/"/>
-	
-	
 
-	
+	<property name="build.dir" value="${basedir}/build" />
+	<property name="jar.dir" value="${basedir}/build/jar" />
+	<property name="build.classes.dir" value="${build.dir}/classes" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="res.dir" value="${basedir}/res" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="conf.dir" value="${basedir}/etc" />
+	<property name="main-class" value="ee.ut.math.tvt.team7.Intro" />
+	<property name="test.reports.dir" value="${build.dir}/reports/" />
+
+
+
+
 
 	<!-- Definitions of classpath variants used for different tasks -->
 
 	<path id="compile.classpath">
 		<fileset dir="lib">
-			<include name="*.jar"/>
+			<include name="*.jar" />
 		</fileset>
 	</path>
 
 	<path id="test.classpath">
-		<pathelement location="${build.classes.dir}"/>
+		<pathelement location="${build.classes.dir}" />
 		<!-- configuration -->
-		<pathelement location="${conf.dir}"/>
+		<pathelement location="${conf.dir}" />
 		<fileset dir="lib">
-			<include name="*.jar"/>
+			<include name="*.jar" />
 		</fileset>
 	</path>
 
-	<!-- Definitions of runnable ant targets.
-         Run them from the command line by executing "ant [targetname]"  -->
-
-	<target name="run" depends="build" description="Run the app">
-		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="test.classpath" fork="yes" />
+	<!-- Definitions of runnable ant targets. Run them from the command line 
+		by executing "ant [targetname]" -->
+	<target name="runc" depends="build" description="Run the application (console)">
+		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="test.classpath"
+			fork="yes">
+			<arg value="console" />
+		</java>
 	</target>
-	
+	<target name="run" depends="build" description="Run the app">
+		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="test.classpath"
+			fork="yes" />
+	</target>
+
 	<target name="build" description="Build the system">
-		<mkdir dir="${build.dir}"/>
-		<mkdir dir="${build.classes.dir}"/>
-		<javac
-            srcdir="${src.dir}"
-            destdir="${build.classes.dir}"
-            debug="true"
-            debuglevel="lines,vars,source"
-            encoding="utf-8"
-            compiler="modern"
-            target="1.7"
-            source="1.7"
-			includeantruntime="false">
-			<classpath refid="compile.classpath"/>
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true"
+			debuglevel="lines,vars,source" encoding="utf-8" compiler="modern"
+			target="1.7" source="1.7" includeantruntime="false">
+			<classpath refid="compile.classpath" />
 		</javac>
 
 	</target>
-		
+
 	<target name="dist" depends="build">
 		<mkdir dir="${jar.dir}" />
 		<jar destfile="${jar.dir}/team7.jar">
-		    <manifest>
-		        <attribute name="Main-Class" value="${main-class}" />
-		    </manifest>
-			<fileset dir="${build.classes.dir}"/>
-			<fileset dir="${src.dir}"/>
-			<fileset dir="${res.dir}"/>
-			<fileset dir="${lib.dir}"/>
-			<fileset dir="${conf.dir}"/>
-			<fileset file="version.properties"/>
-			<fileset file="application.properties"/>
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}" />
+			</manifest>
+			<fileset dir="${build.classes.dir}" />
+			<fileset dir="${src.dir}" />
+			<fileset dir="${res.dir}" />
+			<fileset dir="${lib.dir}" />
+			<fileset dir="${conf.dir}" />
+			<fileset file="version.properties" />
+			<fileset file="application.properties" />
 		</jar>
 	</target>
-	
+
 	<target name="jrun" depends="dist">
-	    <java classname="${main-class}" fork="true" >
-	        <classpath>
-	            <path refid="test.classpath" />
-	            <path location="${jar.dir}/${ant.project.name}.jar" />
-	        </classpath>
-	    </java>
+		<java classname="${main-class}" fork="true">
+			<classpath>
+				<path refid="test.classpath" />
+				<path location="${jar.dir}/${ant.project.name}.jar" />
+			</classpath>
+		</java>
 	</target>
-	
+
 
 	<!-- Clean up build system results -->
 	<target name="clean" description="Clean up build system results">
-		<delete dir="${build.dir}"/>
+		<delete dir="${build.dir}" />
 	</target>
 
 </project>
