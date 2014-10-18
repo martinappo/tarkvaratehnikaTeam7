@@ -15,6 +15,7 @@ public class Intro {
 	private static final String MODE = "console";
 
 	public static void main(String[] args) throws IOException {
+		
 
 		final SalesDomainController domainController = new SalesDomainControllerImpl();
 

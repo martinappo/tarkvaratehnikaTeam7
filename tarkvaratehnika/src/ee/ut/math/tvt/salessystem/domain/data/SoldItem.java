@@ -23,7 +23,16 @@ public class SoldItem implements Cloneable, DisplayableItem {
     }
     
     
-    public Long getId() {
+    
+    @Override
+	public String toString() {
+		return name+"" + "\t" + quantity + "\t"
+				+ price;
+	}
+
+
+
+	public Long getId() {
         return id;
     }
     

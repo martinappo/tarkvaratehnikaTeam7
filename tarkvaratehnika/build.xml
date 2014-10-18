@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." name="templateApp" default="build">
+<project basedir="." name="POS" default="build">
 
 	<!-- Definitions of variables used during the rest of this script -->
 	<propertyfile file="version.properties" comment="Version properties">
@@ -30,10 +30,6 @@
 	<property name="conf.dir" value="${basedir}/etc" />
 	<property name="main-class" value="ee.ut.math.tvt.team7.Intro" />
 	<property name="test.reports.dir" value="${build.dir}/reports/" />
-
-
-
-
 
 	<!-- Definitions of classpath variants used for different tasks -->
 
