@@ -29,6 +29,7 @@ import com.jgoodies.looks.windows.WindowsLookAndFeel;
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
+import ee.ut.math.tvt.salessystem.ui.model.HistoryTableModel;
 import ee.ut.math.tvt.salessystem.ui.model.PurchaseInfoTableModel;
 import ee.ut.math.tvt.salessystem.ui.tabs.PurchaseTab;
 
@@ -46,15 +47,18 @@ public class AddInfoUI extends JFrame {
 	private JButton acceptBtn;
 
 	PurchaseInfoTableModel currentPurchaseInfoTableModel;
+	HistoryTableModel historyTableModel;
 
 	SalesDomainController domainController;
-	
+
 	PurchaseTab pTab;
 
 	public AddInfoUI(PurchaseInfoTableModel currentPurchaseInfoTableModel,
+			HistoryTableModel historyTableModel,
 			SalesDomainController domainController, PurchaseTab pTab) {
-		
+
 		this.currentPurchaseInfoTableModel = currentPurchaseInfoTableModel;
+		this.historyTableModel = historyTableModel;
 		this.domainController = domainController;
 		this.pTab = pTab;
 
@@ -71,7 +75,7 @@ public class AddInfoUI extends JFrame {
 		List<SoldItem> items = currentPurchaseInfoTableModel.getTableRows();
 
 		for (SoldItem item : items) {
-			sum += item.getPrice();
+			sum += item.getPrice() * item.getQuantity();
 		}
 
 		initButtons();
@@ -172,6 +176,7 @@ public class AddInfoUI extends JFrame {
 							.submitCurrentPurchase(currentPurchaseInfoTableModel
 									.getTableRows());
 					log.info("Sale complete");
+					historyTableModel.fireTableDataChanged();
 					pTab.endSale();
 					currentPurchaseInfoTableModel.clear();
 					dispose();
