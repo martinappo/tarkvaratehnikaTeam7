@@ -176,7 +176,7 @@ public class AddInfoUI extends JFrame {
 							.submitCurrentPurchase(currentPurchaseInfoTableModel
 									.getTableRows());
 					log.info("Sale complete");
-					historyTableModel.fireTableDataChanged();
+					historyTableModel.populateWithData(domainController.getHistoryState());
 					pTab.endSale();
 					currentPurchaseInfoTableModel.clear();
 					dispose();
