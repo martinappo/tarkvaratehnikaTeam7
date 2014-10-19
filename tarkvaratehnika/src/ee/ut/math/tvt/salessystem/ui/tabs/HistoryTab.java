@@ -3,6 +3,8 @@ package ee.ut.math.tvt.salessystem.ui.tabs;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -10,6 +12,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 
+import ee.ut.math.tvt.salessystem.domain.data.Purchase;
+import ee.ut.math.tvt.salessystem.ui.HistoryAddInfoUI;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
 
 /**
@@ -28,7 +32,18 @@ public class HistoryTab {
     
     public Component draw() {
         JPanel panel = new JPanel();
-        JTable table = new JTable(model.getHistoryTableModel());
+        final JTable table = new JTable(model.getHistoryTableModel());
+        
+        table.addMouseListener(new MouseAdapter() {
+        	
+        	public void mousePressed(MouseEvent e){
+        		int row = table.rowAtPoint(e.getPoint());
+        		Purchase selected = model.getHistoryTableModel().getTableRows().get(row);
+        		HistoryAddInfoUI info = new HistoryAddInfoUI(selected.getItems());
+        		info.setVisible(true);
+        	}
+        	
+		});
 
         JTableHeader header = table.getTableHeader();
         header.setReorderingAllowed(false);
