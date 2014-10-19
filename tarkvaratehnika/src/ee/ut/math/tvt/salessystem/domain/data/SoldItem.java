@@ -1,13 +1,16 @@
 package ee.ut.math.tvt.salessystem.domain.data;
 
+import java.io.Serializable;
+
 
 
 /**
  * Already bought StockItem. SoldItem duplicates name and price for preserving history. 
  */
-public class SoldItem implements Cloneable, DisplayableItem {
+public class SoldItem implements Cloneable, DisplayableItem, Serializable {
 
-    private Long id;
+	private static final long serialVersionUID = 1L;
+	private Long id;
     private StockItem stockItem;
     
     private String name;
@@ -21,16 +24,6 @@ public class SoldItem implements Cloneable, DisplayableItem {
         this.quantity = quantity;
         
     }
-    
-    
-    
-    @Override
-	public String toString() {
-		return name+"" + "\t" + quantity + "\t"
-				+ price;
-	}
-
-
 
 	public Long getId() {
         return id;

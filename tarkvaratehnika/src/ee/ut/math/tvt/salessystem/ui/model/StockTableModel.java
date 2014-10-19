@@ -52,6 +52,19 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 		}
 		fireTableDataChanged();
 	}
+	
+	public void removeItem(final StockItem stockItem, int quanity) {
+		try {
+			StockItem item = getItemById(stockItem.getId());
+			item.setQuantity(item.getQuantity() - quanity);
+			log.debug("Found existing item " + stockItem.getName()
+					+ " decreased quantity by " + quanity);
+		}
+		catch (NoSuchElementException e) {
+			log.error("No such item in warehouse: " + stockItem.getName());
+		}
+		fireTableDataChanged();
+	}
 
 	@Override
 	public String toString() {

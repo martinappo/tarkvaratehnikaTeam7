@@ -157,7 +157,7 @@ public class PurchaseTab {
 	protected void submitPurchaseButtonClicked() {
 		// log.info("Sale complete");
 		AddInfoUI info = new AddInfoUI(model.getCurrentPurchaseTableModel(),
-				domainController, this);
+				model.getHistoryTableModel(), domainController, this);
 		info.setVisible(true);
 	}
 
