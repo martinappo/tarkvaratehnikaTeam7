@@ -1,0 +1,4 @@
+tarkvaratehnika/build/
+**/build
+application.properties
+version.properties
