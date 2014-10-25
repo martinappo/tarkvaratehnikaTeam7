@@ -154,5 +154,39 @@
 		</git>
 	</target>
 
+	<!-- Git tag -->
+	<target name="git_tag">
+		<!-- ask from user -->
+		<input
+		    message="Username:"
+		    addproperty="username"
+		 />
+		<input 
+			message="Password:"
+			addproperty="password"
+		/>
+		<input
+		    message="Tag name:"
+		    addproperty="tagName"
+		 />
+		<input 
+			message="Tag comment:"
+			addproperty="tagComment"
+		/>		
+		<!-- Tag -->
+		<git command="tag">
+			<args>
+				<arg value="-a ${tagName}"/>
+				<arg value="-m ${tagComment}"/>
+			</args>
+		</git>
+		<!-- Push -->
+		<git command="push">
+			<args>
+				<arg value="https://${username}:${password}@github.com/martinappo/tarkvaratehnikaTeam7.git" />
+			</args>
+		</git>
+	</target>
+
 </project>
 
