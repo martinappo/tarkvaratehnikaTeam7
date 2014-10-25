@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." name="POS" default="build">
-
+	<!-- Define git macro -->
+	<macrodef name = "git">
+	    <attribute name = "command" />
+	    <attribute name = "dir" default = "" />
+	    <element name = "args" optional = "true" />
+	    <sequential>
+	        <echo message = "git @{command}" />
+	        <exec executable = "git" dir = "@{dir}">
+	            <arg value = "@{command}" />
+	            <args/>
+	        </exec>
+	    </sequential>
+	</macrodef>
+	
 	<!-- Definitions of variables used during the rest of this script -->
 	<propertyfile file="version.properties" comment="Version properties">
 		<entry key="build.revision.number" default="" operation="+"
@@ -56,11 +69,14 @@
 			<arg value="console" />
 		</java>
 	</target>
+	
+	<!-- Run the app -->
 	<target name="run" depends="build" description="Run the app">
 		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="test.classpath"
 			fork="yes" />
 	</target>
-
+	
+	<!-- Build the system -->
 	<target name="build" description="Build the system">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.classes.dir}" />
@@ -69,9 +85,9 @@
 			target="1.7" source="1.7" includeantruntime="false">
 			<classpath refid="compile.classpath" />
 		</javac>
-
 	</target>
-
+	
+	<!-- Create jar file -->
 	<target name="dist" depends="build">
 		<mkdir dir="${jar.dir}" />
 		<jar destfile="${jar.dir}/team7.jar">
@@ -87,7 +103,8 @@
 			<fileset file="application.properties" />
 		</jar>
 	</target>
-
+	
+	<!-- Run jar file -->
 	<target name="jrun" depends="dist">
 		<java classname="${main-class}" fork="true">
 			<classpath>
@@ -97,10 +114,23 @@
 		</java>
 	</target>
 
-
 	<!-- Clean up build system results -->
 	<target name="clean" description="Clean up build system results">
 		<delete dir="${build.dir}" />
+	</target>
+	
+	<!-- Commit to git -->
+	<target name="git_commit">
+		<git command="add">
+			<args>
+				<arg value="-A" />
+			</args>
+		</git>
+		<git command="commit">
+			<args>
+				<arg value="-m 'comment'" />
+			</args>
+		</git>
 	</target>
 
 </project>
