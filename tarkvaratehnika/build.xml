@@ -121,14 +121,35 @@
 	
 	<!-- Commit to git -->
 	<target name="git_commit">
+		<!-- Add -->
 		<git command="add">
 			<args>
 				<arg value="-A" />
 			</args>
 		</git>
+		<!-- Commit -->
+		<input
+		    message="Commit comment:"
+		    addproperty="comment"
+		/>
 		<git command="commit">
+			  
 			<args>
-				<arg value="-m 'comment'" />
+				<arg value="-m ${comment}" />
+			</args>
+		</git>
+		<!-- Push -->
+		<input
+		    message="Username:"
+		    addproperty="username"
+		 />
+		<input 
+			message="Password:"
+			addproperty="password"
+		/>
+		<git command="push">
+			<args>
+				<arg value="https://${username}:${password}@github.com/martinappo/tarkvaratehnikaTeam7.git" />
 			</args>
 		</git>
 	</target>
