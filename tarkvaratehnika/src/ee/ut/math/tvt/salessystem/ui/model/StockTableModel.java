@@ -58,6 +58,9 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 			item.setQuantity(item.getQuantity() - quanity);
 			log.debug("Found existing item " + stockItem.getName()
 					+ " decreased quantity by " + quanity);
+			if (item.getQuantity() == 0) {
+				
+			}
 		}
 		catch (NoSuchElementException e) {
 			log.error("No such item in warehouse: " + stockItem.getName());

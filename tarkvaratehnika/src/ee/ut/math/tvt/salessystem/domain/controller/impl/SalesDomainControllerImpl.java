@@ -52,9 +52,25 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		// throw new VerificationFailedException("Underaged!");
 		// XXX - Save purchase
 		addToHistory(goods);
+		removeFromStock(goods);
 
 	}
 	
+	private void removeFromStock(List<SoldItem> goods) {
+		for (SoldItem s: goods) {
+			String name = s.getName();
+			StockItem item = null;
+			for (StockItem i: stockitems) {
+				if (i.getName() == name)
+					item = i;
+					if (item != null && item.getQuantity() != 0) {
+						item.setQuantity(item.getQuantity() - s.getQuantity());
+					}
+			}
+			
+			writeStock();
+		}
+	}
 	private void addToHistory(List<SoldItem> goods) {
 		Calendar calendar = Calendar.getInstance();
 		purchases.add(new Purchase(calendar, goods));
@@ -90,8 +106,12 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	}
 	private void addToStock(StockItem good) {
 		stockitems.add(good);
-		FileOutputStream fout;
+		writeStock();
+	}
+	
+	private void writeStock () {
 		try {
+			FileOutputStream fout;
 			fout = new FileOutputStream("etc/stockDatabase.dat");
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
 			oos.writeObject(stockitems);
