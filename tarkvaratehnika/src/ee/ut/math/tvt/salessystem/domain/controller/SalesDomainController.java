@@ -53,6 +53,7 @@ public interface SalesDomainController {
      *            Goods that the buyer has chosen to buy.
      * @throws VerificationFailedException
      */
+    public void editStockItem(StockItem editable) throws VerificationFailedException;
     public void submitCurrentPurchase(List<SoldItem> goods)
             throws VerificationFailedException;   
     public void submitNewStockItem(StockItem newitem) 

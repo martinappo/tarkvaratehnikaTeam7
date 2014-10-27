@@ -34,6 +34,14 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		addToStock(newitem);
 		
 	}
+	public void editStockItem(StockItem editable) throws VerificationFailedException{
+		for(StockItem i:stockitems){
+			if(i.getId()==editable.getId()){
+				i=editable;
+				refresh();
+			}
+		}
+	}
 
 	public void submitCurrentPurchase(List<SoldItem> goods)
 			throws VerificationFailedException {
@@ -55,6 +63,22 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
 			
 			oos.writeObject(purchases);
+			oos.close();
+			fout.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void refresh() {
+		FileOutputStream fout;
+		try {
+			fout = new FileOutputStream("etc/stockDatabase.dat");
+			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			
+			oos.writeObject(stockitems);
 			oos.close();
 			fout.close();
 		} catch (FileNotFoundException e) {

@@ -157,6 +157,7 @@ public class AddStockUI extends JFrame {
 					item.setDescription(uus.getDescription());
 					log.debug("Found existing item " + uus.getName()
 							+ " increased quantity by " + uus.getQuantity());
+					domainController.editStockItem(item);
 				} catch (NoSuchElementException e1) {
 					try {
 						domainController.submitNewStockItem(uus);
@@ -165,6 +166,9 @@ public class AddStockUI extends JFrame {
 					} catch (VerificationFailedException e2) {
 						e2.printStackTrace();
 					}
+				} catch (VerificationFailedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				} 
 				StockTableModel.populateWithData(domainController
 						.getStockState());
