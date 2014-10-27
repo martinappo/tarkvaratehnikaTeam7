@@ -15,6 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -53,6 +54,8 @@ public class AddInfoUI extends JFrame {
 
 	PurchaseTab pTab;
 
+	JFrame frame;
+
 	public AddInfoUI(PurchaseInfoTableModel currentPurchaseInfoTableModel,
 			HistoryTableModel historyTableModel,
 			SalesDomainController domainController, PurchaseTab pTab) {
@@ -61,6 +64,7 @@ public class AddInfoUI extends JFrame {
 		this.historyTableModel = historyTableModel;
 		this.domainController = domainController;
 		this.pTab = pTab;
+		frame = this;
 
 		setTitle("Purchase Info");
 
@@ -170,16 +174,23 @@ public class AddInfoUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					log.debug("Contents of the current basket:\n"
-							+ currentPurchaseInfoTableModel);
-					domainController
-							.submitCurrentPurchase(currentPurchaseInfoTableModel
-									.getTableRows());
-					log.info("Sale complete");
-					historyTableModel.populateWithData(domainController.getHistoryState());
-					pTab.endSale();
-					currentPurchaseInfoTableModel.clear();
-					dispose();
+					calculateChange();
+					if (Double.parseDouble(changeAmount.getText()) < 0) {
+						JOptionPane.showMessageDialog(frame,
+								"Not enough money paid!");
+					} else {
+						log.debug("Contents of the current basket:\n"
+								+ currentPurchaseInfoTableModel);
+						domainController
+								.submitCurrentPurchase(currentPurchaseInfoTableModel
+										.getTableRows());
+						log.info("Sale complete");
+						historyTableModel.populateWithData(domainController
+								.getHistoryState());
+						pTab.endSale();
+						currentPurchaseInfoTableModel.clear();
+						dispose();
+					}
 				} catch (VerificationFailedException e1) {
 					log.error(e1.getMessage());
 				}
