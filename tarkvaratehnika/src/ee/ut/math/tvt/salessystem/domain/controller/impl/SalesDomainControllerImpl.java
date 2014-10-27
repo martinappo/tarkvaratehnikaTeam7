@@ -58,10 +58,10 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	
 	private void removeFromStock(List<SoldItem> goods) {
 		for (SoldItem s: goods) {
-			String name = s.getName();
+			long id = s.getId();
 			StockItem item = null;
 			for (StockItem i: stockitems) {
-				if (i.getName() == name)
+				if (i.getId() == id)
 					item = i;
 					if (item != null && item.getQuantity() != 0) {
 						item.setQuantity(item.getQuantity() - s.getQuantity());
