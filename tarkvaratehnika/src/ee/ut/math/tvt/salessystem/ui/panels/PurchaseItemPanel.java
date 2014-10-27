@@ -224,9 +224,8 @@ public class PurchaseItemPanel extends JPanel {
      * Reset dialog fields.
      */
     public void reset() {
-        barCodeField.setText("");
-        quantityField.setText("1");
-        priceField.setText("");
+    	fillDialogFields(nameField.getItemAt(0).toString());
+    	
     }
 
     /*
