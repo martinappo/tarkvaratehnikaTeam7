@@ -18,6 +18,7 @@ public class SoldItem implements Cloneable, DisplayableItem, Serializable {
     private double price;
     
     public SoldItem(StockItem stockItem, int quantity) {
+    	this.id = stockItem.getId();
         this.stockItem = stockItem;
         this.name = stockItem.getName();
         this.price = stockItem.getPrice();
