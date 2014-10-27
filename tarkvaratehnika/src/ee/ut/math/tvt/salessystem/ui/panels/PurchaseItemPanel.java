@@ -1,8 +1,10 @@
 package ee.ut.math.tvt.salessystem.ui.panels;
 
+import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.ui.model.SalesSystemModel;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -10,9 +12,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.List;
 import java.util.NoSuchElementException;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,14 +37,12 @@ public class PurchaseItemPanel extends JPanel {
     // Text field on the dialogPane
     private JTextField barCodeField;
     private JTextField quantityField;
-    private JTextField nameField;
+    private JComboBox nameField;
     private JTextField priceField;
-
     private JButton addItemButton;
 
     // Warehouse model
     private SalesSystemModel model;
-
     /**
      * Constructs new purchase item panel.
      * 
@@ -46,7 +51,6 @@ public class PurchaseItemPanel extends JPanel {
      */
     public PurchaseItemPanel(SalesSystemModel model) {
         this.model = model;
-
         setLayout(new GridBagLayout());
 
         add(drawDialogPane(), getDialogPaneConstraints());
@@ -80,26 +84,24 @@ public class PurchaseItemPanel extends JPanel {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(5, 2));
         panel.setBorder(BorderFactory.createTitledBorder("Product"));
-
+        
         // Initialize the textfields
         barCodeField = new JTextField();
         quantityField = new JTextField("1");
-        nameField = new JTextField();
+        nameField = new JComboBox();
         priceField = new JTextField();
-
-        // Fill the dialog fields if the bar code text field loses focus
-        barCodeField.addFocusListener(new FocusListener() {
-            public void focusGained(FocusEvent e) {
-            }
-
-            public void focusLost(FocusEvent e) {
-                fillDialogFields();
+        
+        // Fill the dialog fields if item is changed
+        nameField.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                fillDialogFields(e.getItem().toString());
             }
         });
-
-        nameField.setEditable(false);
+        
+        barCodeField.setEnabled(false);
+        nameField.setEnabled(false);
         priceField.setEditable(false);
-
+        fillNameField();
         // == Add components to the panel
 
         // - bar code
@@ -132,17 +134,28 @@ public class PurchaseItemPanel extends JPanel {
     }
 
     // Fill dialog with data from the "database".
-    public void fillDialogFields() {
-        StockItem stockItem = getStockItemByBarcode();
-
+    public void fillDialogFields(String name) {
+    	
+        StockItem stockItem = getStockItemByName(name);
+       
         if (stockItem != null) {
-            nameField.setText(stockItem.getName());
+           
             String priceString = String.valueOf(stockItem.getPrice());
+            String idString = String.valueOf(stockItem.getId());
             priceField.setText(priceString);
+            barCodeField.setText(idString);
         } else {
             reset();
         }
     }
+    // Fill name field
+    public void fillNameField(){
+    	List<StockItem>stockItems = model.getWarehouseTableModel().getTableRows();
+		for(int i = 0; i<stockItems.size(); i++){
+			nameField.addItem(stockItems.get(i).getName());
+		}
+    }
+    
 
     // Search the warehouse for a StockItem with the bar code entered
     // to the barCode textfield.
@@ -155,6 +168,21 @@ public class PurchaseItemPanel extends JPanel {
         } catch (NoSuchElementException ex) {
             return null;
         }
+    }
+    private StockItem getStockItemByName(String name){
+    	try {
+    		List<StockItem>stockItems = model.getWarehouseTableModel().getTableRows();
+    		for(int i = 0; i<stockItems.size(); i++){
+    			if(stockItems.get(i).getName().equals(name)){
+    				return stockItems.get(i);
+    			}
+    		}
+        } catch (NumberFormatException ex) {
+            return null;
+        } catch (NoSuchElementException ex) {
+            return null;
+        }
+		return null;
     }
 
     /**
@@ -180,8 +208,8 @@ public class PurchaseItemPanel extends JPanel {
      */
     @Override
     public void setEnabled(boolean enabled) {
+    	this.nameField.setEnabled(enabled);
         this.addItemButton.setEnabled(enabled);
-        this.barCodeField.setEnabled(enabled);
         this.quantityField.setEnabled(enabled);
     }
 
@@ -191,7 +219,6 @@ public class PurchaseItemPanel extends JPanel {
     public void reset() {
         barCodeField.setText("");
         quantityField.setText("1");
-        nameField.setText("");
         priceField.setText("");
     }
 

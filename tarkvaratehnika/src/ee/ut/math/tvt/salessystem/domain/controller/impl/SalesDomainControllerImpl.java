@@ -17,6 +17,7 @@ import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
 
+
 /**
  * Implementation of the sales domain controller.
  */
@@ -93,7 +94,6 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		try {
 			fout = new FileOutputStream("etc/stockDatabase.dat");
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
-			
 			oos.writeObject(stockitems);
 			oos.close();
 			fout.close();
@@ -109,7 +109,6 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	}
 
 	public void startNewPurchase() throws VerificationFailedException {
-		// XXX - Start new purchase
 	}
 
 
