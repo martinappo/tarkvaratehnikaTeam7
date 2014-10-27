@@ -65,7 +65,7 @@ public class PurchaseTab {
 		return panel;
 	}
 
-	// The purchase menu. Contains buttons "New purchase", "Submit", "Cancel".
+	// The purchase menu. Contains buttons "New purchase", "Confirm", "Cancel".
 	private Component getPurchaseMenuPane() {
 		JPanel panel = new JPanel();
 
