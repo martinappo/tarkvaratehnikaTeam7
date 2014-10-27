@@ -24,6 +24,14 @@ import org.apache.log4j.Logger;
 import com.jgoodies.looks.windows.WindowsLookAndFeel;
 
 
+
+
+
+
+import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
+import ee.ut.math.tvt.salessystem.domain.data.StockItem;
+import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
+import ee.ut.math.tvt.salessystem.ui.model.HistoryTableModel;
 import ee.ut.math.tvt.salessystem.ui.model.StockTableModel;
 
 public class AddStockUI extends JFrame {
@@ -37,7 +45,12 @@ public class AddStockUI extends JFrame {
 	private JButton cancelBtn;
 	private JButton addBtn;
 	
-	public AddStockUI(){
+	SalesDomainController domainController;
+	StockTableModel StockTableModel;
+	
+	public AddStockUI(SalesDomainController domainController,StockTableModel StockTableModel){
+		this.domainController = domainController;
+		this.StockTableModel = StockTableModel;
 		setTitle("Add stock item");
 		try {
 			UIManager.setLookAndFeel(new WindowsLookAndFeel());
@@ -135,9 +148,15 @@ public class AddStockUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					log.info("Product added complete");
+					StockItem uus = new StockItem(Long.parseLong(id.getText()),
+							name.getText(),description.getText(),
+							Double.parseDouble(price.getText()),
+							Integer.parseInt(quantity.getText()));
+					log.info("Product added "+ uus.toString());
+					domainController.submitNewStockItem(uus);
+					StockTableModel.populateWithData(domainController.getStockState());
 					dispose();
-				} catch (RuntimeException e1) {
+				} catch (VerificationFailedException e1) {
 					log.error(e1.getMessage());
 				}
 			}

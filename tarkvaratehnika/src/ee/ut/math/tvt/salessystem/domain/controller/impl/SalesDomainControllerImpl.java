@@ -23,9 +23,16 @@ import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
 public class SalesDomainControllerImpl implements SalesDomainController {
 	
 	List<Purchase> purchases;
+	List<StockItem> stockitems;
 	
 	public SalesDomainControllerImpl() {
 		purchases = loadHistoryState();
+		stockitems = loadStockState();
+	}
+	public void submitNewStockItem(StockItem newitem) 
+			throws VerificationFailedException{
+		addToStock(newitem);
+		
 	}
 
 	public void submitCurrentPurchase(List<SoldItem> goods)
@@ -56,6 +63,22 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 			e.printStackTrace();
 		}
 	}
+	private void addToStock(StockItem good) {
+		stockitems.add(good);
+		FileOutputStream fout;
+		try {
+			fout = new FileOutputStream("etc/stockDatabase.dat");
+			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			
+			oos.writeObject(stockitems);
+			oos.close();
+			fout.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void cancelCurrentPurchase() throws VerificationFailedException {
 		// XXX - Cancel current purchase
@@ -74,7 +97,7 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		StockItem chupaChups = new StockItem(2l, "Chupa-chups", "Sweets", 8.0,
 				8);
 		StockItem frankfurters = new StockItem(3l, "Frankfurters",
-				"Beer sauseges", 15.0, 12);
+				"Beer sausages", 15.0, 12);
 		StockItem beer = new StockItem(4l, "Free Beer", "Student's delight",
 				0.0, 100);
 
@@ -111,10 +134,38 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 
 		return purchases;
 	}
+	
+	@SuppressWarnings("unchecked")
+	private List<StockItem> loadStockState() {
+		List<StockItem> stockitems = new ArrayList<>();
+		FileInputStream fin;
+		ObjectInputStream ois;
+		try {
+			fin = new FileInputStream("etc/stockDatabase.dat");
+			ois = new ObjectInputStream(fin);
+			try {
+				stockitems = (List<StockItem>) ois.readObject();
+			} catch (EOFException e) {
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			fin.close();
+			ois.close();
+		} catch (EOFException e) {
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return stockitems;
+	}
 
 	public List<Purchase> getHistoryState() {
 		return purchases;
 	}
-	
+	public List<StockItem> getStockState(){
+		return stockitems;
+	}
 	
 }
