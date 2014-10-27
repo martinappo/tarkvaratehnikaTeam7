@@ -153,6 +153,8 @@ public class AddStockUI extends JFrame {
 					StockItem item = StockTableModel.getItemById(uus.getId());
 					item.setQuantity(item.getQuantity() + uus.getQuantity());
 					item.setPrice(uus.getPrice());
+					item.setName(uus.getName());
+					item.setDescription(uus.getDescription());
 					log.debug("Found existing item " + uus.getName()
 							+ " increased quantity by " + uus.getQuantity());
 					domainController.submitNewStockItem(item);
