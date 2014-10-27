@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.NoSuchElementException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -22,11 +23,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.log4j.Logger;
 
 import com.jgoodies.looks.windows.WindowsLookAndFeel;
-
-
-
-
-
 
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
@@ -44,11 +40,12 @@ public class AddStockUI extends JFrame {
 	private JTextField quantity;
 	private JButton cancelBtn;
 	private JButton addBtn;
-	
+
 	SalesDomainController domainController;
 	StockTableModel StockTableModel;
-	
-	public AddStockUI(SalesDomainController domainController,StockTableModel StockTableModel){
+
+	public AddStockUI(SalesDomainController domainController,
+			StockTableModel StockTableModel) {
 		this.domainController = domainController;
 		this.StockTableModel = StockTableModel;
 		setTitle("Add stock item");
@@ -62,10 +59,11 @@ public class AddStockUI extends JFrame {
 		name = new JTextField(40);
 		description = new JTextField(40);
 		price = new JTextField(40);
-		quantity = new JTextField(40);;
-		
+		quantity = new JTextField(40);
+		;
+
 		initButtons();
-		
+
 		JPanel basketPane = new JPanel();
 		basketPane.setLayout(new GridBagLayout());
 		basketPane.setBorder(BorderFactory
@@ -75,13 +73,13 @@ public class AddStockUI extends JFrame {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(0, 5, 0, 5);
-		c.weightx	 = 1.0; 
+		c.weightx = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;
 		actions.add(new JLabel("Insert product id: "), c);
 		c.gridx = 1;
 		c.gridy = 0;
-		actions.add(id, c);	
+		actions.add(id, c);
 		c.gridx = 0;
 		c.gridy = 1;
 		actions.add(new JLabel("Insert product name: "), c);
@@ -115,11 +113,9 @@ public class AddStockUI extends JFrame {
 		c.gridx = 1;
 		c.gridy = 0;
 		basketPane.add(actions, c);
-		
+
 		add(basketPane);
-		
-		
-		
+
 		int width = 300;
 		int height = 250;
 		setSize(width, height);
@@ -132,9 +128,10 @@ public class AddStockUI extends JFrame {
 			}
 		});
 	}
+
 	private void initButtons() {
 		cancelBtn = new JButton("Cancel");
-		addBtn = new JButton("Add product");
+		addBtn = new JButton("Add/edit product");
 
 		cancelBtn.addActionListener(new ActionListener() {
 
@@ -144,21 +141,35 @@ public class AddStockUI extends JFrame {
 			}
 		});
 		addBtn.addActionListener(new ActionListener() {
-
+			//
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				StockItem uus = new StockItem(Long.parseLong(id.getText()),
+						name.getText(), description.getText(), Double
+								.parseDouble(price.getText()), Integer
+								.parseInt(quantity.getText()));
+				log.info("Added product " + uus.toString());
 				try {
-					StockItem uus = new StockItem(Long.parseLong(id.getText()),
-							name.getText(),description.getText(),
-							Double.parseDouble(price.getText()),
-							Integer.parseInt(quantity.getText()));
-					log.info("Product added "+ uus.toString());
-					domainController.submitNewStockItem(uus);
-					StockTableModel.populateWithData(domainController.getStockState());
-					dispose();
+					StockItem item = StockTableModel.getItemById(uus.getId());
+					item.setQuantity(item.getQuantity() + uus.getQuantity());
+					item.setPrice(uus.getPrice());
+					log.debug("Found existing item " + uus.getName()
+							+ " increased quantity by " + uus.getQuantity());
+					domainController.submitNewStockItem(item);
+				} catch (NoSuchElementException e1) {
+					try {
+						domainController.submitNewStockItem(uus);
+						log.debug("Added " + uus.getName() + " quantity of "
+								+ uus.getQuantity());
+					} catch (VerificationFailedException e2) {
+						e2.printStackTrace();
+					}
 				} catch (VerificationFailedException e1) {
-					log.error(e1.getMessage());
+					e1.printStackTrace();
 				}
+				StockTableModel.populateWithData(domainController
+						.getStockState());
+				dispose();
 			}
 		});
 	}

@@ -11,9 +11,8 @@ import ee.ut.math.tvt.salessystem.domain.data.StockItem;
  */
 public class StockTableModel extends SalesSystemTableModel<StockItem> {
 	private static final long serialVersionUID = 1L;
-
 	private static final Logger log = Logger.getLogger(StockTableModel.class);
-
+	
 	public StockTableModel() {
 		super(new String[] {"Id", "Name", "Price", "Quantity"});
 	}
