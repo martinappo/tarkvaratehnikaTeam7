@@ -84,7 +84,7 @@ public class AddInfoUI extends JFrame {
 
 		initButtons();
 		payAmount = new JTextField("0.0");
-		changeAmount = new JLabel("    0.0");
+		changeAmount = new JLabel("0.0");
 
 		payAmount.addActionListener(new ActionListener() {
 			@Override
@@ -117,7 +117,9 @@ public class AddInfoUI extends JFrame {
 		actions.add(sumField, c);
 		c.gridx = 1;
 		c.gridy = 0;
-		actions.add(new JLabel("    " + sum), c);
+		c.ipadx = 10;
+		actions.add(new JLabel("" + sum), c);
+		c.ipadx = 0;
 		c.gridx = 0;
 		c.gridy = 1;
 		actions.add(new JLabel("Payment amount:"), c);
