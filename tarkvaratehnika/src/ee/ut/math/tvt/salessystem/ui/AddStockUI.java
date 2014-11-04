@@ -73,6 +73,7 @@ public class AddStockUI extends JFrame {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(0, 5, 0, 5);
+		c.weighty = 0.5;
 		c.weightx = 1.0;
 		c.gridx = 0;
 		c.gridy = 0;

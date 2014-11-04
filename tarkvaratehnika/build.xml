@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." name="POS" default="build">
 	<!-- Define git macro -->
-	<macrodef name = "git">
-	    <attribute name = "command" />
-	    <attribute name = "dir" default = "" />
-	    <element name = "args" optional = "true" />
-	    <sequential>
-	        <echo message = "git @{command}" />
-	        <exec executable = "git" dir = "@{dir}">
-	            <arg value = "@{command}" />
-	            <args/>
-	        </exec>
-	    </sequential>
+	<macrodef name="git">
+		<attribute name="command" />
+		<attribute name="dir" default="" />
+		<element name="args" optional="true" />
+		<sequential>
+			<echo message="git @{command}" />
+			<exec executable="git" dir="@{dir}">
+				<arg value="@{command}" />
+				<args />
+			</exec>
+		</sequential>
 	</macrodef>
-	
+
 	<!-- Definitions of variables used during the rest of this script -->
 	<propertyfile file="version.properties" comment="Version properties">
-		<entry key="build.revision.number" default="" operation="+"
-			value="1" type="int" />
+		<entry key="build.revision.number" default="" operation="+" value="1" type="int" />
 	</propertyfile>
 	<property file="version.properties" />
 	<propertyfile file="application.properties" comment="App properties">
@@ -30,8 +29,7 @@
 	<propertyfile file="version.properties" comment="Version properties">
 		<entry key="build.minor.number" type="int" value="5" />
 		<entry key="build.major.number" type="int" value="1" />
-		<entry key="build.number" type="string"
-			value="${build.major.number}.${build.minor.number}.${build.revision.number}" />
+		<entry key="build.number" type="string" value="${build.major.number}.${build.minor.number}.${build.revision.number}" />
 	</propertyfile>
 
 	<property name="build.dir" value="${basedir}/build" />
@@ -44,10 +42,20 @@
 	<property name="main-class" value="ee.ut.math.tvt.team7.Intro" />
 	<property name="test.reports.dir" value="${build.dir}/reports/" />
 
+	<!-- database variables -->
+	<property name="data.dir" value="${basedir}/data" />
+	<property name="db.file" value="${data.dir}/POSdb" />
+	<property name="db.alias" value="POS" />
+	<property name="db.url" value="jdbc:hsqldb:hsql://localhost/POS" />
+	<property name="lib.hibernate.dir" value="${lib.dir}/hibernate" />
+
 	<!-- Definitions of classpath variants used for different tasks -->
 
 	<path id="compile.classpath">
 		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${lib.hibernate.dir}">
 			<include name="*.jar" />
 		</fileset>
 	</path>
@@ -61,37 +69,45 @@
 		</fileset>
 	</path>
 
+	<path id="run.classpath">
+		<pathelement location="${build.classes.dir}" />
+		<!-- configuration -->
+		<pathelement location="${conf.dir}" />
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+
+		<fileset dir="${lib.hibernate.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+
 	<!-- Definitions of runnable ant targets. Run them from the command line 
 		by executing "ant [targetname]" -->
 	<target name="runc" depends="build" description="Run the application (console)">
-		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="test.classpath"
-			fork="yes">
+		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="test.classpath" fork="yes">
 			<arg value="console" />
 		</java>
 	</target>
-	
+
 	<!-- Run the app -->
 	<target name="run" depends="build" description="Run the app">
-		  <java
-		          classname="ee.ut.math.tvt.team7.Intro"
-		            classpathref="test.classpath"
-		            fork="yes">
-		          <jvmarg value="-Xdebug" />
-		          <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044" />
-		        </java>
+		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="test.classpath" fork="yes">
+			<jvmarg value="-Xdebug" />
+			<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044" />
+		</java>
 	</target>
-	
+
 	<!-- Build the system -->
 	<target name="build" description="Build the system">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.classes.dir}" />
-		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true"
-			debuglevel="lines,vars,source" encoding="utf-8" compiler="modern"
-			target="1.7" source="1.7" includeantruntime="false">
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true" debuglevel="lines,vars,source" encoding="utf-8" compiler="modern" target="1.7" source="1.7" includeantruntime="false">
 			<classpath refid="compile.classpath" />
 		</javac>
 	</target>
-	
+
 	<!-- Create jar file -->
 	<target name="dist" depends="build">
 		<mkdir dir="${jar.dir}" />
@@ -108,7 +124,7 @@
 			<fileset file="application.properties" />
 		</jar>
 	</target>
-	
+
 	<!-- Run jar file -->
 	<target name="jrun" depends="dist">
 		<java classname="${main-class}" fork="true">
@@ -123,7 +139,7 @@
 	<target name="clean" description="Clean up build system results">
 		<delete dir="${build.dir}" />
 	</target>
-	
+
 	<!-- Commit to git -->
 	<target name="git_commit">
 		<!-- Add -->
@@ -133,25 +149,16 @@
 			</args>
 		</git>
 		<!-- Commit -->
-		<input
-		    message="Commit comment:"
-		    addproperty="comment"
-		/>
+		<input message="Commit comment:" addproperty="comment" />
 		<git command="commit">
-			  
+
 			<args>
 				<arg value="-m ${comment}" />
 			</args>
 		</git>
 		<!-- Push -->
-		<input
-		    message="Username:"
-		    addproperty="username"
-		 />
-		<input 
-			message="Password:"
-			addproperty="password"
-		/>
+		<input message="Username:" addproperty="username" />
+		<input message="Password:" addproperty="password" />
 		<git command="push">
 			<args>
 				<arg value="https://${username}:${password}@github.com/martinappo/tarkvaratehnikaTeam7.git" />
@@ -162,27 +169,15 @@
 	<!-- Git tag -->
 	<target name="git_tag">
 		<!-- ask from user -->
-		<input
-		    message="Username:"
-		    addproperty="username"
-		 />
-		<input 
-			message="Password:"
-			addproperty="password"
-		/>
-		<input
-		    message="Tag name:"
-		    addproperty="tagName"
-		 />
-		<input 
-			message="Tag comment:"
-			addproperty="tagComment"
-		/>		
+		<input message="Username:" addproperty="username" />
+		<input message="Password:" addproperty="password" />
+		<input message="Tag name:" addproperty="tagName" />
+		<input message="Tag comment:" addproperty="tagComment" />
 		<!-- Tag -->
 		<git command="tag">
 			<args>
-				<arg value="-a ${tagName}"/>
-				<arg value="-m ${tagComment}"/>
+				<arg value="-a ${tagName}" />
+				<arg value="-m ${tagComment}" />
 			</args>
 		</git>
 		<!-- Push -->
@@ -192,6 +187,28 @@
 			</args>
 		</git>
 	</target>
+	
+	<!-- Database -->
+	<target name="dbmanager" description="Start the HSQLDB manager">
+	        <java
+	            classname="org.hsqldb.util.DatabaseManagerSwing"
+	            classpathref="run.classpath"
+	            fork="yes"
+	        >
+	            <arg line="--user sa --url ${db.url}" />
+	        </java>
+	    </target>
+
+	    <target name="startdb" description="Start the HSQLDB with the default params">
+	        <java
+	            classname="org.hsqldb.Server"
+	            classpathref="run.classpath"
+	            fork="yes"
+	        >
+	            <arg line="-database.0 '${db.file}' -dbname.0 '${db.alias}'" /> 
+	        </java>
+	</target>
+
 
 </project>
 
