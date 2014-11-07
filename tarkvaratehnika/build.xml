@@ -38,16 +38,17 @@
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="res.dir" value="${basedir}/res" />
 	<property name="lib.dir" value="${basedir}/lib" />
-	<property name="conf.dir" value="${basedir}/etc" />
+	<property name="conf.dir" value="${basedir}/conf" />
 	<property name="main-class" value="ee.ut.math.tvt.team7.Intro" />
 	<property name="test.reports.dir" value="${build.dir}/reports/" />
-
+	<property name="lib.hibernate.dir" value="${lib.dir}/hibernate" />
+	
 	<!-- database variables -->
 	<property name="data.dir" value="${basedir}/data" />
 	<property name="db.file" value="${data.dir}/POSdb" />
 	<property name="db.alias" value="POS" />
 	<property name="db.url" value="jdbc:hsqldb:hsql://localhost/POS" />
-	<property name="lib.hibernate.dir" value="${lib.dir}/hibernate" />
+	
 
 	<!-- Definitions of classpath variants used for different tasks -->
 
@@ -55,16 +56,8 @@
 		<fileset dir="lib">
 			<include name="*.jar" />
 		</fileset>
+		
 		<fileset dir="${lib.hibernate.dir}">
-			<include name="*.jar" />
-		</fileset>
-	</path>
-
-	<path id="test.classpath">
-		<pathelement location="${build.classes.dir}" />
-		<!-- configuration -->
-		<pathelement location="${conf.dir}" />
-		<fileset dir="lib">
 			<include name="*.jar" />
 		</fileset>
 	</path>
@@ -86,14 +79,14 @@
 	<!-- Definitions of runnable ant targets. Run them from the command line 
 		by executing "ant [targetname]" -->
 	<target name="runc" depends="build" description="Run the application (console)">
-		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="test.classpath" fork="yes">
+		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="run.classpath" fork="yes">
 			<arg value="console" />
 		</java>
 	</target>
 
 	<!-- Run the app -->
 	<target name="run" depends="build" description="Run the app">
-		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="test.classpath" fork="yes">
+		<java classname="ee.ut.math.tvt.team7.Intro" classpathref="run.classpath" fork="yes">
 			<jvmarg value="-Xdebug" />
 			<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044" />
 		</java>
@@ -103,8 +96,18 @@
 	<target name="build" description="Build the system">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.classes.dir}" />
-		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true" debuglevel="lines,vars,source" encoding="utf-8" compiler="modern" target="1.7" source="1.7" includeantruntime="false">
+		<javac 
+			srcdir="${src.dir}" 
+			destdir="${build.classes.dir}" 
+			debug="true" 
+			debuglevel="lines,vars,source" encoding="utf-8" 
+			compiler="modern" target="1.7" 
+			source="1.7" 
+			includeantruntime="false"
+		>
 			<classpath refid="compile.classpath" />
+			<compilerarg value="-Xlint:unchecked" />
+			<compilerarg value="-Xlint:deprecation" />
 		</javac>
 	</target>
 

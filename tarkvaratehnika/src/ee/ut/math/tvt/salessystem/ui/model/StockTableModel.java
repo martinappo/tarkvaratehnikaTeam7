@@ -3,16 +3,19 @@ package ee.ut.math.tvt.salessystem.ui.model;
 import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
+import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 
 /**
  * Stock item table model.
  */
+@SuppressWarnings("unchecked")
 public class StockTableModel extends SalesSystemTableModel<StockItem> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(StockTableModel.class);
-	
+	private Session session = HibernateUtil.currentSession();
 	public StockTableModel() {
 		super(new String[] {"Id", "Name", "Price", "Quantity"});
 	}
