@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.NoSuchElementException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -141,35 +140,20 @@ public class AddStockUI extends JFrame {
 			}
 		});
 		addBtn.addActionListener(new ActionListener() {
-			//
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				StockItem uus = new StockItem(Long.parseLong(id.getText()),
 						name.getText(), description.getText(), Double
 								.parseDouble(price.getText()), Integer
 								.parseInt(quantity.getText()));
-				
+
 				try {
-					StockItem item = StockTableModel.getItemById(uus.getId());
-					item.setQuantity(item.getQuantity() + uus.getQuantity());
-					item.setPrice(uus.getPrice());
-					item.setName(uus.getName());
-					item.setDescription(uus.getDescription());
-					log.debug("Found existing item " + uus.getName()
-							+ " increased quantity by " + uus.getQuantity());
-					domainController.editStockItem(item);
-				} catch (NoSuchElementException e1) {
-					try {
-						domainController.submitNewStockItem(uus);
-						log.debug("Added " + uus.getName() + " quantity of "
-								+ uus.getQuantity());
-					} catch (VerificationFailedException e2) {
-						e2.printStackTrace();
-					}
+					domainController.submitNewStockItem(uus);
 				} catch (VerificationFailedException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} 
+				}
+
 				StockTableModel.populateWithData(domainController
 						.getStockState());
 				dispose();

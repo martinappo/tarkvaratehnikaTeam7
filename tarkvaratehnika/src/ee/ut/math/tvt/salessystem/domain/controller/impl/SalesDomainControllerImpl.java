@@ -1,9 +1,5 @@
 package ee.ut.math.tvt.salessystem.domain.controller.impl;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.sql.Date;
 import java.util.List;
 
@@ -25,7 +21,6 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	
 	@SuppressWarnings("unchecked")
 	public SalesDomainControllerImpl() {
-		//purchases = loadHistoryState();
 		purchases = session.createQuery("from "+"Purchase").list();
 		stockitems = session.createQuery("from "+"StockItem").list();
 	}
@@ -38,7 +33,6 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		for(Object i: stockitems){
 			if(((StockItem)i).getId()==editable.getId()){
 				i=editable;
-				refresh();
 			}
 		}
 	}
@@ -86,28 +80,39 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		
 	}
 	
-	private void refresh() {
-		FileOutputStream fout;
-		try {
-			fout = new FileOutputStream("etc/stockDatabase.dat");
-			ObjectOutputStream oos = new ObjectOutputStream(fout);
-			
-			oos.writeObject(stockitems);
-			oos.close();
-			fout.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	private void addToStock(StockItem good) {
-		stockitems.add(good);
-		writeStock();
+		if (isInStock(good)) {
+			StockItem toEdit = stockitems.get(indexOf(good));
+			toEdit.setQuantity(toEdit.getQuantity() + good.getQuantity());
+			session.beginTransaction();
+			StockItem s = (StockItem) session.get(StockItem.class, new Long(good.getId()));
+			int qToAdd = s.getQuantity() + good.getQuantity();
+			good.setQuantity(qToAdd);
+			s = good;
+			session.getTransaction().commit();
+		} else {
+			stockitems.add(good);
+			session.beginTransaction();
+			session.save(good);
+			session.getTransaction().commit();
+		}
+		
 	}
 	
-	private void writeStock () {
-		//TODO write query to StockItem table
+	private boolean isInStock(StockItem item) {
+		for (StockItem i : stockitems) {
+			if (i.getId() == item.getId())
+				return true;
+		}
+		return false;
+	}
+	
+	private int indexOf(StockItem item) {
+		for (int i = 0; i < stockitems.size(); i++) {
+			if (item.getId() == stockitems.get(i).getId())
+				return i;
+		}
+		return -1;
 	}
 
 	public void cancelCurrentPurchase() throws VerificationFailedException {
