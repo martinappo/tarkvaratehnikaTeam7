@@ -25,7 +25,7 @@ public class Purchase implements DisplayableItem, Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@OneToMany(mappedBy="purchase")
+	@OneToMany(mappedBy="saleId")
 	private List<SoldItem> goods;
 	
 	@Column(name="date")

@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -23,11 +25,12 @@ public class SoldItem implements Cloneable, DisplayableItem, Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="sale_id")
-	private Purchase purchase;
+	@ManyToOne
+	@JoinColumn(name = "sale_id", nullable = false)
+	private Purchase saleId;
 	
-	@Column(name="stockitem_id")
-    private StockItem stockItem;
+	@Column(name = "stockitem_id", nullable = false)
+    private Long stockItemId;
     
 	@Column(name="name")
     private String name;
@@ -37,9 +40,11 @@ public class SoldItem implements Cloneable, DisplayableItem, Serializable {
 	
 	@Column(name="itemprice")
     private double price;
+	
+	private StockItem stockItem;
     
     public SoldItem(StockItem stockItem, int quantity) {
-    	this.id = stockItem.getId();
+    	this.stockItemId = stockItem.getId();
         this.stockItem = stockItem;
         this.name = stockItem.getName();
         this.price = stockItem.getPrice();

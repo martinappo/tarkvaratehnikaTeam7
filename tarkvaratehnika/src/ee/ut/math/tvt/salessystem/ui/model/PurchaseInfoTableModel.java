@@ -14,7 +14,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 	private static final Logger log = Logger.getLogger(PurchaseInfoTableModel.class);
 	
 	public PurchaseInfoTableModel() {
-		super(new String[] { "Id", "Name", "Price", "Quantity", "Sum"}, "Purchase");
+		super(new String[] { "Id", "Name", "Price", "Quantity", "Sum"}, "SoldItem");
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
 			buffer.append(headers[i] + "\t");
 		buffer.append("\n");
 
-		for (final SoldItem item : rows) {
+		for (final SoldItem item : table) {
 			buffer.append(item.getId() + "\t");
 			buffer.append(item.getName() + "\t");
 			buffer.append(item.getPrice() + "\t");
@@ -62,8 +62,8 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
          * XXX In case such stockItem already exists increase the quantity of the
          * existing stock.
          */
-        
-        rows.add(item);
+    	System.out.println(item.getName());
+    	//addTableItem(item);
         log.debug("Added " + item.getName() + " quantity of " + item.getQuantity());
         fireTableDataChanged();
     }

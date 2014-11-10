@@ -20,10 +20,9 @@ public abstract class SalesSystemTableModel<T extends DisplayableItem> extends
 
     private static final long serialVersionUID = 1L;
 
-    protected List<T> rows;
     protected final String[] headers;
     private static Session session = HibernateUtil.currentSession();
-    private List<T> table; 
+    protected List<T> table; 
 	private String tablename;
     public SalesSystemTableModel(final String[] headers, String tablename) {
         this.headers = headers;

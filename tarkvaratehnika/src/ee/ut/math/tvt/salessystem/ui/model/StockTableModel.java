@@ -81,7 +81,7 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 			buffer.append(headers[i] + "\t");
 		buffer.append("\n");
 
-		for (final StockItem stockItem : rows) {
+		for (final StockItem stockItem : table) {
 			buffer.append(stockItem.getId() + "\t");
 			buffer.append(stockItem.getName() + "\t");
 			buffer.append(stockItem.getPrice() + "\t");
