@@ -7,8 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.sql.Date;
 import java.util.List;
 
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
@@ -16,6 +18,7 @@ import ee.ut.math.tvt.salessystem.domain.data.Purchase;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
+import ee.ut.math.tvt.salessystem.ui.model.SalesSystemTableModel;
 import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 
 
@@ -28,8 +31,9 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	List<StockItem> stockitems;
 	
 	public SalesDomainControllerImpl() {
-		purchases = loadHistoryState();
-		stockitems = loadStockState();
+		//purchases = loadHistoryState();
+		purchases = new ArrayList<Purchase>();
+		//stockitems = loadStockState();
 	}
 	public void submitNewStockItem(StockItem newitem) 
 			throws VerificationFailedException{
@@ -78,21 +82,13 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		}
 	}
 	private void addToHistory(List<SoldItem> goods) {
-		Calendar calendar = Calendar.getInstance();
-		purchases.add(new Purchase(calendar, goods));
-		FileOutputStream fout;
-		try {
-			fout = new FileOutputStream("etc/historyDatabase.dat");
-			ObjectOutputStream oos = new ObjectOutputStream(fout);
-			
-			oos.writeObject(purchases);
-			oos.close();
-			fout.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Date calendar = new Date(System.currentTimeMillis());
+		Purchase toAdd = new Purchase(calendar, goods);
+		purchases.add(toAdd);
+		SalesSystemTableModel.session.beginTransaction();
+		SalesSystemTableModel.session.save(toAdd);
+		SalesSystemTableModel.session.getTransaction().commit();
+		
 	}
 	
 	private void refresh() {
@@ -167,28 +163,7 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	
 	@SuppressWarnings("unchecked")
 	private List<StockItem> loadStockState() {
-		List<StockItem> stockitems = new ArrayList<>();
-		FileInputStream fin;
-		ObjectInputStream ois;
-		try {
-			fin = new FileInputStream("etc/stockDatabase.dat");
-			ois = new ObjectInputStream(fin);
-			try {
-				stockitems = (List<StockItem>) ois.readObject();
-			} catch (EOFException e) {
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			fin.close();
-			ois.close();
-		} catch (EOFException e) {
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return stockitems;
+		return null;
 	}
 
 	public List<Purchase> getHistoryState() {

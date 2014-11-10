@@ -12,7 +12,6 @@ import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 /**
  * Stock item table model.
  */
-@SuppressWarnings("unchecked")
 public class StockTableModel extends SalesSystemTableModel<StockItem> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(StockTableModel.class);

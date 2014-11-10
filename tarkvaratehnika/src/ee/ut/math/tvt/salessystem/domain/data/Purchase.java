@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -14,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="PURCHASE")
@@ -31,12 +31,13 @@ public class Purchase implements DisplayableItem, Serializable {
 	@Column(name="date")
 	private Date date;
 	
+	@Transient
 	private DateFormat dateFormat;
 
-	private Calendar calendar;
+	//private Calendar calendar;
 
-	public Purchase(Calendar calendar, List<SoldItem> goods) {
-		this.calendar = calendar;
+	public Purchase(Date calendar, List<SoldItem> goods) {
+		this.date = (Date) calendar;
 		this.goods = goods;
 
 		dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -45,12 +46,12 @@ public class Purchase implements DisplayableItem, Serializable {
 
 	public String getDate() {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		return dateFormat.format(calendar.getTime());
+		return dateFormat.format(date.getTime());
 	}
 
 	public String getTime() {
 		dateFormat = new SimpleDateFormat("HH:mm:ss");
-		return dateFormat.format(calendar.getTime());
+		return dateFormat.format(date.getTime());
 	}
 
 	public double getOrderSum() {
