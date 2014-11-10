@@ -35,9 +35,11 @@ public class Purchase implements DisplayableItem, Serializable {
 	private DateFormat dateFormat;
 
 	//private Calendar calendar;
+	
+	public Purchase() {}
 
 	public Purchase(Date calendar, List<SoldItem> goods) {
-		this.date = (Date) calendar;
+		this.date = calendar;
 		this.goods = goods;
 
 		dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -56,9 +58,9 @@ public class Purchase implements DisplayableItem, Serializable {
 
 	public double getOrderSum() {
 		double sum = 0;
-		for (SoldItem item : goods) {
-			sum += item.getPrice() * item.getQuantity();
-		}
+//		for (SoldItem item : goods) {
+//			sum += item.getPrice() * item.getQuantity();
+//		}
 		return sum;
 	}
 

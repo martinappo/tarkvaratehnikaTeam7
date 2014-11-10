@@ -26,7 +26,7 @@ public class SoldItem implements Cloneable, DisplayableItem, Serializable {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name = "sale_id", nullable = false)
+	@JoinColumn(name = "saleId", nullable = false)
 	private Purchase saleId;
 	
 	@Column(name = "stockitem_id", nullable = false)
@@ -42,6 +42,8 @@ public class SoldItem implements Cloneable, DisplayableItem, Serializable {
     private double price;
 	
 	private StockItem stockItem;
+	
+	public SoldItem() {}
     
     public SoldItem(StockItem stockItem, int quantity) {
     	this.stockItemId = stockItem.getId();

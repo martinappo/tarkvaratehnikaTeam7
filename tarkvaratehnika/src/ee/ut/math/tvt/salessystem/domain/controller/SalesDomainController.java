@@ -2,16 +2,21 @@ package ee.ut.math.tvt.salessystem.domain.controller;
 
 import java.util.List;
 
+import org.hibernate.Session;
+
 import ee.ut.math.tvt.salessystem.domain.data.Purchase;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
+import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 
 /**
  * Sales domain controller is responsible for the domain specific business
  * processes.
  */
 public interface SalesDomainController {
+	
+	public Session session = HibernateUtil.currentSession();
 
     /**
      * Load the current state of the warehouse.

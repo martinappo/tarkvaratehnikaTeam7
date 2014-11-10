@@ -27,7 +27,6 @@ import com.jgoodies.looks.windows.WindowsLookAndFeel;
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
-import ee.ut.math.tvt.salessystem.ui.model.HistoryTableModel;
 import ee.ut.math.tvt.salessystem.ui.model.StockTableModel;
 
 public class AddStockUI extends JFrame {

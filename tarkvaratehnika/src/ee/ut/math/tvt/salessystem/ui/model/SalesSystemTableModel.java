@@ -6,11 +6,7 @@ import java.util.NoSuchElementException;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.hibernate.Session;
-
 import ee.ut.math.tvt.salessystem.domain.data.DisplayableItem;
-import ee.ut.math.tvt.salessystem.domain.data.StockItem;
-import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 
 /**
  * Generic table model implementation suitable for extending.
@@ -21,19 +17,12 @@ public abstract class SalesSystemTableModel<T extends DisplayableItem> extends
     private static final long serialVersionUID = 1L;
 
     protected final String[] headers;
-    public static Session session = HibernateUtil.currentSession();
+    
     protected List<T> table;
-	private String tablename;
     @SuppressWarnings("unchecked")
-	public SalesSystemTableModel(final String[] headers, String tablename) {
+	public SalesSystemTableModel(final String[] headers) {
         this.headers = headers;
-        this.tablename = tablename;
-        try {
-        	this.table = session.createQuery("from "+tablename).list();
-        }
-        catch (Exception e){
-        	this.table = new ArrayList<T>();
-        }
+        this.table = new ArrayList();
         
     }
 
@@ -82,9 +71,9 @@ public abstract class SalesSystemTableModel<T extends DisplayableItem> extends
     }
     
     public void addTableItem(T item){
-    	session.beginTransaction();
-    	session.save(item);
-    	session.getTransaction().commit();
+//    	session.beginTransaction();
+//    	session.save(item);
+//    	session.getTransaction().commit();
 	}
 
     public void populateWithData(final List<T> data) {

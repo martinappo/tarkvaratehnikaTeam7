@@ -1,13 +1,10 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
 
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
-import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 
 /**
  * Stock item table model.
@@ -17,7 +14,7 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 	private static final Logger log = Logger.getLogger(StockTableModel.class);
 	
 	public StockTableModel() {
-		super(new String[] {"Id", "Name", "Price", "Quantity"}, "StockItem");
+		super(new String[] {"Id", "Name", "Price", "Quantity"});
 	}
 
 	@Override

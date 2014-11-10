@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.sql.Date;
 import java.util.List;
 
+import org.hibernate.Session;
+
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.Purchase;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
@@ -27,13 +29,13 @@ import ee.ut.math.tvt.salessystem.util.HibernateUtil;
  */
 public class SalesDomainControllerImpl implements SalesDomainController {
 	
-	List<Purchase> purchases;
-	List<StockItem> stockitems;
+	List purchases;
+	List stockitems;
 	
 	public SalesDomainControllerImpl() {
 		//purchases = loadHistoryState();
-		purchases = new ArrayList<Purchase>();
-		//stockitems = loadStockState();
+		purchases = session.createQuery("from "+"Purchase").list();
+		stockitems = session.createQuery("from "+"StockItem").list();
 	}
 	public void submitNewStockItem(StockItem newitem) 
 			throws VerificationFailedException{
@@ -41,8 +43,8 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		
 	}
 	public void editStockItem(StockItem editable) throws VerificationFailedException{
-		for(StockItem i:stockitems){
-			if(i.getId()==editable.getId()){
+		for(Object i: stockitems){
+			if(((StockItem)i).getId()==editable.getId()){
 				i=editable;
 				refresh();
 			}
@@ -67,27 +69,15 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	}
 	
 	private void removeFromStock(List<SoldItem> goods) {
-		for (SoldItem s: goods) {
-			long id = s.getId();
-			StockItem item = null;
-			for (StockItem i: stockitems) {
-				if (i.getId() == id)
-					item = i;
-					if (item != null && item.getQuantity() != 0) {
-						item.setQuantity(item.getQuantity() - s.getQuantity());
-					}
-			}
-			
-			writeStock();
-		}
+		//TODO remove item from stock database and update table
 	}
 	private void addToHistory(List<SoldItem> goods) {
 		Date calendar = new Date(System.currentTimeMillis());
 		Purchase toAdd = new Purchase(calendar, goods);
 		purchases.add(toAdd);
-		SalesSystemTableModel.session.beginTransaction();
-		SalesSystemTableModel.session.save(toAdd);
-		SalesSystemTableModel.session.getTransaction().commit();
+		session.beginTransaction();
+		session.save(toAdd);
+		session.getTransaction().commit();
 		
 	}
 	
@@ -112,18 +102,7 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	}
 	
 	private void writeStock () {
-		try {
-			FileOutputStream fout;
-			fout = new FileOutputStream("etc/stockDatabase.dat");
-			ObjectOutputStream oos = new ObjectOutputStream(fout);
-			oos.writeObject(stockitems);
-			oos.close();
-			fout.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		//TODO write query to StockItem table
 	}
 
 	public void cancelCurrentPurchase() throws VerificationFailedException {
@@ -172,5 +151,6 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	public List<StockItem> getStockState(){
 		return stockitems;
 	}
+	
 	
 }
