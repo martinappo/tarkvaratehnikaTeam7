@@ -1,26 +1,17 @@
 package ee.ut.math.tvt.salessystem.domain.controller.impl;
 
-import java.io.EOFException;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.sql.Date;
 import java.util.List;
-
-import org.hibernate.Session;
 
 import ee.ut.math.tvt.salessystem.domain.controller.SalesDomainController;
 import ee.ut.math.tvt.salessystem.domain.data.Purchase;
 import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 import ee.ut.math.tvt.salessystem.domain.exception.VerificationFailedException;
-import ee.ut.math.tvt.salessystem.ui.model.SalesSystemTableModel;
 import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 
 
@@ -29,9 +20,10 @@ import ee.ut.math.tvt.salessystem.util.HibernateUtil;
  */
 public class SalesDomainControllerImpl implements SalesDomainController {
 	
-	List purchases;
-	List stockitems;
+	List<Purchase> purchases;
+	List<StockItem> stockitems;
 	
+	@SuppressWarnings("unchecked")
 	public SalesDomainControllerImpl() {
 		//purchases = loadHistoryState();
 		purchases = session.createQuery("from "+"Purchase").list();
@@ -69,7 +61,16 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	}
 	
 	private void removeFromStock(List<SoldItem> goods) {
-		//TODO remove item from stock database and update table
+		for (SoldItem sold: goods) {
+			for (StockItem stock : stockitems) {
+				if (sold.getStockItem().getId() == stock.getId()) {
+					session.beginTransaction();
+					StockItem s = (StockItem) session.get(StockItem.class, new Long(stock.getId()));
+					s.setQuantity(s.getQuantity() - sold.getQuantity());
+					session.getTransaction().commit();
+				}
+			}
+		}
 	}
 	private void addToHistory(List<SoldItem> goods) {
 		Date calendar = new Date(System.currentTimeMillis());
@@ -114,39 +115,6 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 	}
 
 	public void startNewPurchase() throws VerificationFailedException {
-	}
-
-
-
-	@SuppressWarnings("unchecked")
-	private List<Purchase> loadHistoryState() {
-		List<Purchase> purchases = new ArrayList<>();
-		FileInputStream fin;
-		ObjectInputStream ois;
-		try {
-			fin = new FileInputStream("etc/historyDatabase.dat");
-			ois = new ObjectInputStream(fin);
-			try {
-				purchases = (List<Purchase>) ois.readObject();
-			} catch (EOFException e) {
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			fin.close();
-			ois.close();
-		} catch (EOFException e) {
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return purchases;
-	}
-	
-	@SuppressWarnings("unchecked")
-	private List<StockItem> loadStockState() {
-		return null;
 	}
 
 	public List<Purchase> getHistoryState() {
