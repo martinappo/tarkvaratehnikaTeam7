@@ -44,7 +44,8 @@ public class Purchase implements DisplayableItem, Serializable {
 		this.goods = goods;
 		
 		this.date = calendar;
-		this.time = getTime();
+		dateFormat = new SimpleDateFormat("HH:mm:ss");					
+		this.time  = dateFormat.format(calendar.getTime());
 
 	}
 
@@ -59,9 +60,9 @@ public class Purchase implements DisplayableItem, Serializable {
 
 	public double getOrderSum() {
 		double sum = 0;
-//		for (SoldItem item : goods) {
-//			sum += item.getPrice() * item.getQuantity();
-//		}
+		for (SoldItem item : goods) {
+			sum += item.getPrice() * item.getQuantity();
+		}
 		return sum;
 	}
 
@@ -71,8 +72,7 @@ public class Purchase implements DisplayableItem, Serializable {
 
 	@Override
 	public Long getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 }

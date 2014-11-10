@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * Already bought StockItem. SoldItem duplicates name and price for preserving history. 
@@ -26,7 +27,7 @@ public class SoldItem implements Cloneable, DisplayableItem, Serializable {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name = "saleId", nullable = false)
+	@JoinColumn(name = "sale_id", nullable = false)
 	private Purchase saleId;
 	
 	@Column(name = "stockitem_id", nullable = false)
@@ -41,6 +42,7 @@ public class SoldItem implements Cloneable, DisplayableItem, Serializable {
 	@Column(name="itemprice")
     private double price;
 	
+	@Transient
 	private StockItem stockItem;
 	
 	public SoldItem() {}
@@ -51,6 +53,15 @@ public class SoldItem implements Cloneable, DisplayableItem, Serializable {
         this.name = stockItem.getName();
         this.price = stockItem.getPrice();
         this.quantity = quantity;
+    }
+    
+    public SoldItem(SoldItem item, Purchase purchase) {
+    	this.stockItemId = item.stockItemId;
+        this.stockItem = item.stockItem;
+        this.name = item.getName();
+        this.price = item.getPrice();
+        this.quantity = item.quantity;
+        this.saleId = purchase;
     }
 
 	public Long getId() {
