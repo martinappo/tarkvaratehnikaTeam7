@@ -1,5 +1,6 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.apache.log4j.Logger;
@@ -15,9 +16,9 @@ import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 public class StockTableModel extends SalesSystemTableModel<StockItem> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(StockTableModel.class);
-	private Session session = HibernateUtil.currentSession();
+	
 	public StockTableModel() {
-		super(new String[] {"Id", "Name", "Price", "Quantity"});
+		super(new String[] {"Id", "Name", "Price", "Quantity"}, "StockItem");
 	}
 
 	@Override
@@ -34,6 +35,7 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 		}
 		throw new IllegalArgumentException("Column index out of range");
 	}
+	
 
 	/**
 	 * Add new stock item to table. If there already is a stock item with
@@ -48,7 +50,7 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 					+ " increased quantity by " + stockItem.getQuantity());
 		}
 		catch (NoSuchElementException e) {
-			rows.add(stockItem);
+			addTableItem(stockItem);
 			log.debug("Added " + stockItem.getName()
 					+ " quantity of " + stockItem.getQuantity());
 		}

@@ -6,7 +6,11 @@ import java.util.NoSuchElementException;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.hibernate.Session;
+
 import ee.ut.math.tvt.salessystem.domain.data.DisplayableItem;
+import ee.ut.math.tvt.salessystem.domain.data.StockItem;
+import ee.ut.math.tvt.salessystem.util.HibernateUtil;
 
 /**
  * Generic table model implementation suitable for extending.
@@ -18,10 +22,19 @@ public abstract class SalesSystemTableModel<T extends DisplayableItem> extends
 
     protected List<T> rows;
     protected final String[] headers;
-
-    public SalesSystemTableModel(final String[] headers) {
+    private static Session session = HibernateUtil.currentSession();
+    private List<T> table; 
+	private String tablename;
+    public SalesSystemTableModel(final String[] headers, String tablename) {
         this.headers = headers;
-        rows = new ArrayList<T>();
+        this.tablename = tablename;
+        try {
+        	this.table = session.createQuery("from "+tablename).list();
+        }
+        catch (Exception e){
+        	this.table = new ArrayList<T>();
+        }
+        
     }
 
     /**
@@ -43,16 +56,16 @@ public abstract class SalesSystemTableModel<T extends DisplayableItem> extends
     }
 
     public int getRowCount() {
-        return rows.size();
+        return table.size();
     }
 
     public Object getValueAt(final int rowIndex, final int columnIndex) {
-        return getColumnValue(rows.get(rowIndex), columnIndex);
+        return getColumnValue(table.get(rowIndex), columnIndex);
     }
 
     // search for item with the specified id
     public T getItemById(final long id) {
-        for (final T item : rows) {
+        for (final T item : table) {
             if (item.getId() == id)
                 return item;
         }
@@ -60,17 +73,23 @@ public abstract class SalesSystemTableModel<T extends DisplayableItem> extends
     }
 
     public List<T> getTableRows() {
-        return rows;
+        return table;
     }
 
     public void clear() {
-        rows = new ArrayList<T>();
+        table = new ArrayList<T>();
         fireTableDataChanged();
     }
+    
+    public void addTableItem(T item){
+    	session.beginTransaction();
+    	session.save(item);
+    	session.getTransaction().commit();
+	}
 
     public void populateWithData(final List<T> data) {
-        rows.clear();
-        rows.addAll(data);
+        table.clear();
+        table.addAll(data);
         fireTableDataChanged();
     }
     

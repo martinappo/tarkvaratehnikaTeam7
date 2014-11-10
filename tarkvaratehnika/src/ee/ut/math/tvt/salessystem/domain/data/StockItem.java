@@ -13,7 +13,7 @@ import javax.persistence.Table;
  * Stock item. Corresponds to the Data Transfer Object design pattern.
  */
 @Entity
-@Table(name = "SOLDITEM")
+@Table(name = "STOCKITEM")
 public class StockItem implements Cloneable, DisplayableItem, Serializable {
 	
 	private static final long serialVersionUID = 1L;

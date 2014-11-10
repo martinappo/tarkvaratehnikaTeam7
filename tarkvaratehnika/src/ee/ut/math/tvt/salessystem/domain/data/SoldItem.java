@@ -13,7 +13,7 @@ import javax.persistence.Table;
  * Already bought StockItem. SoldItem duplicates name and price for preserving history. 
  */
 @Entity
-@Table(name="COURSE")
+@Table(name="SOLDITEM")
 public class SoldItem implements Cloneable, DisplayableItem, Serializable {
 
 	
@@ -24,7 +24,7 @@ public class SoldItem implements Cloneable, DisplayableItem, Serializable {
 	private Long id;
 	
 	@Column(name="sale_id")
-	private Purchase saleId;
+	private Purchase purchase;
 	
 	@Column(name="stockitem_id")
     private StockItem stockItem;

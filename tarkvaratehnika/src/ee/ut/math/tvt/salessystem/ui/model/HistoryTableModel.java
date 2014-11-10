@@ -10,7 +10,7 @@ public class HistoryTableModel extends SalesSystemTableModel<Purchase> {
 	private static final long serialVersionUID = 1L;
 
 	public HistoryTableModel() {
-		super(new String[] {"Date", "Time", "Order summary"});
+		super(new String[] {"Date", "Time", "Order summary"}, "History");
 	}
 
 	@Override
