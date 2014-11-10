@@ -34,18 +34,22 @@ public class Purchase implements DisplayableItem, Serializable {
 	@Column(name="time")
 	private String time;
 	
+	@Column(name="summary")
+	private double summary;
+	
 	@Transient
 	private DateFormat dateFormat;
 	//private Calendar calendar;
 	
 	public Purchase() {}
 
-	public Purchase(Date calendar, List<SoldItem> goods) {
-		this.goods = goods;
+	public Purchase(Date calendar, List<SoldItem> solditems) {
+		this.goods = solditems;
 		
 		this.date = calendar;
 		dateFormat = new SimpleDateFormat("HH:mm:ss");					
 		this.time  = dateFormat.format(calendar.getTime());
+		this.summary = getOrderSum();
 
 	}
 
