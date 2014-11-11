@@ -73,8 +73,8 @@ public class SalesDomainControllerImpl implements SalesDomainController {
 		session.beginTransaction();
 		session.save(toAdd);
 		for (SoldItem item : goods) {
-			SoldItem newItem = new SoldItem(item, toAdd);
-			session.save(newItem);
+			item.setPurchase(toAdd);
+			session.save(item);
 		}
 		session.getTransaction().commit();
 		

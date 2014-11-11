@@ -55,13 +55,8 @@ public class SoldItem implements Cloneable, DisplayableItem, Serializable {
         this.quantity = quantity;
     }
     
-    public SoldItem(SoldItem item, Purchase purchase) {
-    	this.stockItemId = item.stockItemId;
-        this.stockItem = item.stockItem;
-        this.name = item.getName();
-        this.price = item.getPrice();
-        this.quantity = item.quantity;
-        this.saleId = purchase;
+    public void setPurchase(Purchase purchase){
+    	this.saleId = purchase;    	
     }
 
 	public Long getId() {
