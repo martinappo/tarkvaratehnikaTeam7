@@ -10,10 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class StockItemTest {
-	private Purchase purchase;
-	private List list;
 	private StockItem stockitem;
-	private Date date;
 
 	@Before
 	public void setUp() {

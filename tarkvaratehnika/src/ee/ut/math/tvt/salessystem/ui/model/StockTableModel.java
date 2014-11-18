@@ -12,9 +12,9 @@ import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 public class StockTableModel extends SalesSystemTableModel<StockItem> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(StockTableModel.class);
-	
+
 	public StockTableModel() {
-		super(new String[] {"Id", "Name", "Price", "Quantity"});
+		super(new String[] { "Id", "Name", "Price", "Quantity" });
 	}
 
 	@Override
@@ -31,28 +31,37 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 		}
 		throw new IllegalArgumentException("Column index out of range");
 	}
-	
 
 	/**
-	 * Add new stock item to table. If there already is a stock item with
-	 * same id, then existing item's quantity will be increased.
+	 * Add new stock item to table. If there already is a stock item with same
+	 * id, then existing item's quantity will be increased.
+	 * 
 	 * @param stockItem
 	 */
 	public void addItem(final StockItem stockItem) {
+		// By name
 		try {
-			StockItem item = getItemById(stockItem.getId());
-			item.setQuantity(item.getQuantity() + stockItem.getQuantity());
-			log.debug("Found existing item " + stockItem.getName()
-					+ " increased quantity by " + stockItem.getQuantity());
+			StockItem item = getItemByName(stockItem.getName());
+			System.out.println("founditem");
+			log.debug("Found item with same name" + stockItem.getName());
+			throw new IllegalArgumentException();
+		} catch (NoSuchElementException e) {
+			// By id
+			try {
+				StockItem item = getItemById(stockItem.getId());
+				item.setQuantity(item.getQuantity() + stockItem.getQuantity());
+				log.debug("Found existing item " + stockItem.getName()
+						+ " increased quantity by " + stockItem.getQuantity());
+			} catch (NoSuchElementException ex) {
+				addTableItem(stockItem);
+				log.debug("Added " + stockItem.getName() + " quantity of "
+						+ stockItem.getQuantity());
+			}
 		}
-		catch (NoSuchElementException e) {
-			addTableItem(stockItem);
-			log.debug("Added " + stockItem.getName()
-					+ " quantity of " + stockItem.getQuantity());
-		}
+
 		fireTableDataChanged();
 	}
-	
+
 	public void removeItem(final StockItem stockItem, int quanity) {
 		try {
 			StockItem item = getItemById(stockItem.getId());
@@ -60,13 +69,21 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 			log.debug("Found existing item " + stockItem.getName()
 					+ " decreased quantity by " + quanity);
 			if (item.getQuantity() == 0) {
-				
+
 			}
-		}
-		catch (NoSuchElementException e) {
+		} catch (NoSuchElementException e) {
 			log.error("No such item in warehouse: " + stockItem.getName());
 		}
 		fireTableDataChanged();
+	}
+
+	// search for item with name
+	public StockItem getItemByName(final String name) {
+		for (final StockItem item : table) {
+			if (item.getName() == name)
+				return item;
+		}
+		throw new NoSuchElementException();
 	}
 
 	@Override
