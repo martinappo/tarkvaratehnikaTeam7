@@ -30,23 +30,23 @@ public class PurchaseTest {
   }
   
   @Test
-  void testAddSoldItem(){
+  public void testAddSoldItem(){
   	
   }
   @Test
-  void testGetSumWithNoItems(){
-		//SoldItem solditem = new SoldItem(stockitem, 0);	
-		//list.add(solditem);
+  public void testGetSumWithNoItems(){
 		purchase = new Purchase(date, list);
 		assertEquals(purchase.getOrderSum(), 0.0, 0.0001);
-	  
   }
   @Test
-  void testGetSumWithOneItem(){
-	  
+  public void testGetSumWithOneItem(){
+	//SoldItem solditem = new SoldItem(stockitem, 0);	
+	//list.add(solditem);
+	  purchase = new Purchase(date, list);
+	  assertEquals(purchase.getOrderSum(), 0.0, 0.0001);
   }
   @Test
-  void testGetSumWithMultipleItems(){
+  public void testGetSumWithMultipleItems(){
 	  
   }
   
