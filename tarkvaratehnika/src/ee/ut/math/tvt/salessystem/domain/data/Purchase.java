@@ -44,8 +44,13 @@ public class Purchase implements DisplayableItem, Serializable {
 	public Purchase() {}
 
 	public Purchase(Date calendar, List<SoldItem> solditems) {
+		for (int i = 0 ; i < solditems.size() ; i++) {
+			StockItem stockitem = solditems.get(i).getStockItem();
+			if(stockitem.getQuantity() < solditems.get(i).getQuantity()){
+				throw new IllegalArgumentException("Invalid quantity!");
+			}
+		}
 		this.goods = solditems;
-		
 		this.date = calendar;
 		dateFormat = new SimpleDateFormat("HH:mm:ss");					
 		this.time  = dateFormat.format(calendar.getTime());

@@ -20,12 +20,15 @@ public class PurchaseTest {
   public void setUp() {
 	date = new Date(System.currentTimeMillis());
 	stockitem = new StockItem(1l,"lauaviin", "viin", 4.0, 3);
-	list = new ArrayList();    
+	list = new ArrayList();   
+	
   }
   
-  @Test
+  @Test(expected=IllegalArgumentException.class)
   public void testAddSoldItem(){
-	  
+	  SoldItem solditem = new SoldItem(stockitem, 5);	
+	  list.add(solditem);
+	  purchase = new Purchase(date, list);
   }
   @Test
   public void testGetSumWithNoItems(){

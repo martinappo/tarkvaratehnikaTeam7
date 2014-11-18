@@ -1,0 +1,38 @@
+package ee.ut.math.tvt.salessystem.domain.data;
+
+import static org.junit.Assert.*;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class StockItemTest {
+	private Purchase purchase;
+	private List list;
+	private StockItem stockitem;
+	private Date date;
+
+	@Before
+	public void setUp() {
+		date = new Date(System.currentTimeMillis());
+		stockitem = new StockItem(1l, "lauaviin", "viin", 4.0, 3);
+		list = new ArrayList();
+	}
+	
+	@Test
+	public void testClone(){
+		StockItem stockitem2 = (StockItem) stockitem.clone();
+		assertEquals(stockitem2.toString(), stockitem.toString());
+		assertNotSame(stockitem2, stockitem);
+		
+	}
+	
+	@Test
+	public void testGetColumn(){
+		
+	}
+
+}

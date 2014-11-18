@@ -102,7 +102,7 @@ public class StockItem implements Cloneable, DisplayableItem, Serializable {
     }
 
     public String toString() {
-        return id + " " + name + " " + description + " " + price;
+        return id + " " + name + " " + description + " " + price + " " + quantity;
     }
 
     /**
@@ -120,7 +120,7 @@ public class StockItem implements Cloneable, DisplayableItem, Serializable {
         }
     }
     
-    
+    @Override
     public Object clone() {
         StockItem item =
             new StockItem(getId(), getName(), getDescription(), getPrice(), getQuantity());
