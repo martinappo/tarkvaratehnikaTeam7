@@ -32,7 +32,15 @@ public class StockItemTest {
 	
 	@Test
 	public void testGetColumn(){
-		
+		assertEquals(stockitem.getColumn(0), stockitem.getId());
+		assertEquals(stockitem.getColumn(1), stockitem.getName());
+		assertEquals(stockitem.getColumn(2), stockitem.getPrice());
+		assertEquals(stockitem.getColumn(3), stockitem.getQuantity());
+	}
+	
+	@Test(expected=RuntimeException.class)
+	public void testGetColumnException(){
+		stockitem.getColumn(99);
 	}
 
 }
