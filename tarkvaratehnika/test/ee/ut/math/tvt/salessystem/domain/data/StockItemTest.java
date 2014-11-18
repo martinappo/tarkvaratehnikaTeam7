@@ -17,9 +17,7 @@ public class StockItemTest {
 
 	@Before
 	public void setUp() {
-		date = new Date(System.currentTimeMillis());
 		stockitem = new StockItem(1l, "lauaviin", "viin", 4.0, 3);
-		list = new ArrayList();
 	}
 	
 	@Test
