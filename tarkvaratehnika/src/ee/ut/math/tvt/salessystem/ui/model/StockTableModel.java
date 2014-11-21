@@ -42,7 +42,6 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 		// By name
 		try {
 			StockItem item = getItemByName(stockItem.getName());
-			System.out.println("founditem");
 			log.debug("Found item with same name" + stockItem.getName());
 			throw new IllegalArgumentException();
 		} catch (NoSuchElementException e) {
@@ -53,7 +52,7 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 				log.debug("Found existing item " + stockItem.getName()
 						+ " increased quantity by " + stockItem.getQuantity());
 			} catch (NoSuchElementException ex) {
-				addTableItem(stockItem);
+				table.add(stockItem);
 				log.debug("Added " + stockItem.getName() + " quantity of "
 						+ stockItem.getQuantity());
 			}
@@ -79,10 +78,17 @@ public class StockTableModel extends SalesSystemTableModel<StockItem> {
 
 	// search for item with name
 	public StockItem getItemByName(final String name) {
+		
+		
 		for (final StockItem item : table) {
+			
 			if (item.getName() == name)
+				
 				return item;
+			
+			
 		}
+		
 		throw new NoSuchElementException();
 	}
 

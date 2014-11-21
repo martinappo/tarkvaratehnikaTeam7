@@ -11,27 +11,29 @@ public class StockTableModelTest {
 	@Before
 	public void setUp() {
 		stockTableModel = new StockTableModel();
-		stockTableModel.addItem(new StockItem(1l, "lauaviin", "viin", 4.0, 3));
 		stockTableModel.addItem(new StockItem(1l, "pilsner", "õlu", 2.0, 8));
-		stockTableModel.addItem(new StockItem(1l, "lays", "krõps", 1.0, 10));
+		stockTableModel.addItem(new StockItem(2l, "estrella", "krõps", 1.0, 10));
+		
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testValidateNameUniqueness(){
-		stockTableModel.addItem(new StockItem(1l, "lauaviin", "viin", 4.0, 3));
+		
+		StockItem stockItem = new StockItem(3l, "estrella", "muu krõps", 1.0, 10);
+		stockTableModel.addItem(stockItem);
 	}
 	
-	@Test
+	
 	public void testHasEnoughInStock(){
 		
 	}
 	
-	@Test
+	
 	public void testGetItemByIdWhenItemExsists(){
 		
 	}
 	
-	@Test
+
 	public void testGetItemByIdWhenThrowsException(){
 		
 	}

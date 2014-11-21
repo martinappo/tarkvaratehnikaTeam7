@@ -72,12 +72,6 @@ public abstract class SalesSystemTableModel<T extends DisplayableItem> extends
         fireTableDataChanged();
     }
     
-    public void addTableItem(T item){
-//    	session.beginTransaction();
-//    	session.save(item);
-//    	session.getTransaction().commit();
-	}
-
     public void populateWithData(final List<T> data) {
         table.clear();
         table.addAll(data);
