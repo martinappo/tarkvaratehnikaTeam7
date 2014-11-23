@@ -1,6 +1,7 @@
 package ee.ut.math.tvt.salessystem.domain.data;
 
 import java.io.Serializable;
+import java.util.NoSuchElementException;
 
 import javax.persistence.Entity;
 import javax.persistence.Column;
@@ -48,6 +49,9 @@ public class SoldItem implements Cloneable, DisplayableItem, Serializable {
 	public SoldItem() {}
     
     public SoldItem(StockItem stockItem, int quantity) {
+    	if (quantity > stockItem.getQuantity()){
+    		throw new IllegalArgumentException();
+    	}
     	this.stockItemId = stockItem.getId();
         this.stockItem = stockItem;
         this.name = stockItem.getName();

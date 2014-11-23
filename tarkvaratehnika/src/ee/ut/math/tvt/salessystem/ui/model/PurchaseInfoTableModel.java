@@ -63,7 +63,13 @@ public class PurchaseInfoTableModel extends SalesSystemTableModel<SoldItem> {
          */
     	//System.out.println(item.getName());
     	//addTableItem(item);
-    	table.add(item);
+    	
+    	try{
+    		table.add(item);
+    	}
+    	catch(IllegalArgumentException e){
+    		log.error("Not enough in stock!");
+    	}
         log.debug("Added " + item.getName() + " quantity of " + item.getQuantity());
         fireTableDataChanged();
     }
