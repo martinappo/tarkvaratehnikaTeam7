@@ -1,8 +1,5 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 import static org.junit.Assert.*;
-
-import java.util.NoSuchElementException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,9 +9,7 @@ import ee.ut.math.tvt.salessystem.domain.data.StockItem;
 public class PurchaseInfoTableModelTest {
 	private PurchaseInfoTableModel purchase;
 	private StockItem pilsner;
-	private StockItem estrella;
 	private SoldItem myyk1;
-	private SoldItem myyk2;
 	
 	@Before
 	public void setUp() {
