@@ -38,7 +38,7 @@ public class StockTab {
     public Component draw() {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
+        refresh();
         GridBagLayout gb = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
         panel.setLayout(gb);
@@ -55,6 +55,10 @@ public class StockTab {
         gc.fill = GridBagConstraints.BOTH;
         panel.add(drawStockMainPane(), gc);
         return panel;
+    }
+    
+    private void refresh() {
+    	model.getWarehouseTableModel().populateWithData(model.getDomainController().getAllStockItems());
     }
 
     // warehouse menu

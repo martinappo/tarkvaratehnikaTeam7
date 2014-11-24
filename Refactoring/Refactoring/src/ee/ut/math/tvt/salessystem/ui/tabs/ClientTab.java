@@ -25,7 +25,7 @@ public class ClientTab {
      */
     public Component draw() {
         JPanel panel = new JPanel();
-        
+        refresh();
         GridBagConstraints gc = getGbConstraints();
         GridBagLayout gb = new GridBagLayout();
         
@@ -33,6 +33,10 @@ public class ClientTab {
         panel.add(drawClientsTable(), gc);
 
         return panel;
+    }
+    
+    private void refresh() {
+    	model.getClientTableModel().populateWithData(model.getDomainController().getAllClients());
     }
 
     

@@ -23,12 +23,16 @@ public class SalesSystemModel {
     private ClientTableModel clientTableModel;
 
     private Client selectedClient;
+    
+    private SalesDomainController domainController;
 
     /**
      * Construct application model.
      * @param domainController Sales domain controller.
      */
     public SalesSystemModel(SalesDomainController domainController) {
+    	
+    	this.domainController = domainController;
 
         warehouseTableModel = new StockTableModel();
         currentPurchaseTableModel = new PurchaseInfoTableModel(this);
@@ -76,5 +80,10 @@ public class SalesSystemModel {
     public void setSelectedClient(Client client) {
         this.selectedClient = client;
     }
+
+	public SalesDomainController getDomainController() {
+		return domainController;
+	}
+    
 
 }
