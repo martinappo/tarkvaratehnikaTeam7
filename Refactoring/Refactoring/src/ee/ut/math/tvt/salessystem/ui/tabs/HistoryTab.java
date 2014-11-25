@@ -34,7 +34,6 @@ public class HistoryTab {
      */
     public Component draw() {
         JPanel panel = new JPanel();
-        refresh();
         GridBagConstraints gc = getGbConstraints();
         GridBagLayout gb = new GridBagLayout();
 
@@ -45,7 +44,7 @@ public class HistoryTab {
         return panel;
     }
     
-    private void refresh() {
+    public void refresh() {
     	model.getPurchaseHistoryTableModel().populateWithData(model.getDomainController().getAllSales());
     }
 
