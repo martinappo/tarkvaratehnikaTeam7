@@ -1,15 +1,21 @@
 package ee.ut.math.tvt.salessystem.ui.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ee.ut.math.tvt.salessystem.domain.data.Client;
+import ee.ut.math.tvt.salessystem.domain.data.SoldItem;
 
 /**
  * Client model.
  */
 public class ClientTableModel extends SalesSystemTableModel<Client> {
 	private static final long serialVersionUID = 1L;
-
+	private List<Client> rows;
+	
 	public ClientTableModel() {
 		super(new String[] { "Id", "First name", "Discount"});
+		this.rows = new ArrayList<Client>();
 	}
 
 	@Override
@@ -41,5 +47,9 @@ public class ClientTableModel extends SalesSystemTableModel<Client> {
 		}
 
 		return buffer.toString();
+	}
+	
+	protected List<Client> getTableRows() {
+		return rows;
 	}
 }
